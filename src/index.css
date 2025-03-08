@@ -69,7 +69,7 @@
 
 @layer base {
   * {
-    @apply border-border antialiased;
+    @apply border-border;
   }
 
   html, body {
@@ -77,8 +77,18 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* RTL Support */
+  [dir="rtl"] {
+    text-align: right;
+  }
+
+  [dir="rtl"] .flex-row {
+    flex-direction: row-reverse;
   }
 
   /* Smooth page transitions */

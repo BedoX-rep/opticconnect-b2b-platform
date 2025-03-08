@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -22,13 +21,13 @@ import {
 const UserNavbar = () => {
   const { user, signOut } = useAuth();
   const location = useLocation();
-  
+
   const isActive = (path: string) => {
     return location.pathname === path;
   };
 
   return (
-    <div className="bg-white border-b border-border shadow-sm sticky top-0 z-10">
+    <div className="bg-white border-b border-border shadow-sm sticky top-0 z-10 dir-rtl"> {/* Added dir-rtl for RTL support */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center py-3 md:py-4">
           {/* Left section with navigation links */}
@@ -40,7 +39,7 @@ const UserNavbar = () => {
                 isActive('/') ? "text-primary" : "text-foreground hover:text-primary"
               )}
             >
-              Home
+              الرئيسية {/* Added Arabic translation for "Home" */}
             </Link>
             <Link 
               to="/distributors"
@@ -49,7 +48,7 @@ const UserNavbar = () => {
                 isActive('/distributors') ? "text-primary" : "text-foreground hover:text-primary"
               )}
             >
-              Distributors
+              الموزعون {/* Added Arabic translation for "Distributors" */}
             </Link>
             <Link 
               to="/products"
@@ -58,10 +57,10 @@ const UserNavbar = () => {
                 isActive('/products') ? "text-primary" : "text-foreground hover:text-primary"
               )}
             >
-              Products
+              المنتجات {/* Added Arabic translation for "Products" */}
             </Link>
           </div>
-          
+
           {/* Right section with auth/profile */}
           <div className="flex items-center">
             {user ? (
@@ -72,17 +71,17 @@ const UserNavbar = () => {
                     <ChevronDown size={16} />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="start" className="w-56"> {/* Changed align to start for RTL */}
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
                       <User size={16} />
-                      <span>My Profile</span>
+                      <span>الملف الشخصي</span> {/* Added Arabic translation for "My Profile" */}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/manage-products" className="flex items-center gap-2 cursor-pointer">
                       <ShoppingBag size={16} />
-                      <span>Manage Products</span>
+                      <span>إدارة المنتجات</span> {/* Added Arabic translation for "Manage Products" */}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -91,7 +90,7 @@ const UserNavbar = () => {
                     className="flex items-center gap-2 cursor-pointer text-destructive"
                   >
                     <LogOut size={16} />
-                    <span>Sign out</span>
+                    <span>تسجيل الخروج</span> {/* Added Arabic translation for "Sign out" */}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -99,7 +98,7 @@ const UserNavbar = () => {
               <Link to="/login">
                 <Button variant="outline" size="sm" className="flex items-center gap-2">
                   <LogIn size={16} />
-                  <span>Sign in</span>
+                  <span>تسجيل الدخول</span> {/* Added Arabic translation for "Sign in" */}
                 </Button>
               </Link>
             )}

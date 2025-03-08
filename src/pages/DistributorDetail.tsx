@@ -1,16 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
-import { 
-  MapPin, 
-  Phone, 
-  ArrowLeft, 
-  Building, 
-  ShoppingBag, 
-  Loader2, 
-  Share2, 
+import {
+  MapPin,
+  Phone,
+  ArrowLeft,
+  Building,
+  ShoppingBag,
+  Loader2,
+  Share2,
   Mail,
   Calendar
 } from 'lucide-react';
@@ -40,7 +39,7 @@ interface Product {
 const DistributorDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { toast } = useToast();
-  
+
   const [distributor, setDistributor] = useState<DistributorProps | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,7 +54,7 @@ const DistributorDetail = () => {
   const fetchDistributor = async () => {
     try {
       setLoading(true);
-      
+
       const { data, error } = await supabase
         .from('distributors')
         .select('*')
@@ -170,7 +169,7 @@ const DistributorDetail = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-12 section-padding" dir="rtl"> {/* Added dir="rtl" for RTL support */}
       <div className="mb-6">
         <Button variant="ghost" asChild className="mb-4">
           <Link to="/distributors">
@@ -180,18 +179,19 @@ const DistributorDetail = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
         {/* Distributor Info */}
         <div className="md:col-span-1">
           <Card>
             <CardContent className="p-6">
               <div className="flex flex-col items-center text-center mb-6">
-                <Avatar className="h-32 w-32 mb-4">
-                  <AvatarImage src={distributor.image_url || ''} alt={distributor.name} />
-                  <AvatarFallback className="text-3xl font-bold">
-                    {distributor.name.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="aspect-square relative overflow-hidden rounded-xl bg-muted mb-6 shadow-md"> {/* Updated Avatar */}
+                  <img
+                    src={distributor.image_url || '/placeholder.svg'}
+                    alt={distributor.name}
+                    className="object-cover w-full h-full transition-transform duration-700 hover:scale-105"
+                  />
+                </div>
                 <h1 className="text-2xl font-bold">{distributor.name}</h1>
                 {distributor.featured && (
                   <Badge className="mt-2" variant="default">
@@ -199,17 +199,17 @@ const DistributorDetail = () => {
                   </Badge>
                 )}
               </div>
-              
+
               <Separator className="my-4" />
-              
+
               {distributor.bio && (
                 <div className="mb-6 text-center">
                   <p className="text-muted-foreground whitespace-pre-wrap">{distributor.bio}</p>
                 </div>
               )}
-              
+
               <Separator className="my-4" />
-              
+
               <div className="space-y-4">
                 {distributor.city && (
                   <div className="flex items-center">
@@ -217,7 +217,7 @@ const DistributorDetail = () => {
                     <span>{distributor.city}</span>
                   </div>
                 )}
-                
+
                 {distributor.phone && (
                   <div className="flex items-center">
                     <Phone className="h-5 w-5 mr-3 text-muted-foreground" />
@@ -226,7 +226,7 @@ const DistributorDetail = () => {
                     </a>
                   </div>
                 )}
-                
+
                 {distributor.email && (
                   <div className="flex items-center">
                     <Mail className="h-5 w-5 mr-3 text-muted-foreground" />
@@ -235,7 +235,7 @@ const DistributorDetail = () => {
                     </a>
                   </div>
                 )}
-                
+
                 {distributor.created_at && (
                   <div className="flex items-center">
                     <Calendar className="h-5 w-5 mr-3 text-muted-foreground" />
@@ -243,7 +243,7 @@ const DistributorDetail = () => {
                   </div>
                 )}
               </div>
-              
+
               <div className="mt-6">
                 <Button onClick={shareProfile} variant="outline" className="w-full">
                   <Share2 className="mr-2 h-4 w-4" />
@@ -256,18 +256,23 @@ const DistributorDetail = () => {
 
         {/* Products Section */}
         <div className="md:col-span-2">
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <ShoppingBag className="mr-2 h-5 w-5" />
-            Products by {distributor.name}
-            <span className="ml-2 text-sm text-muted-foreground">({products.length})</span>
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-1">Products</h2>
+              <h3 className="text-xl font-bold font-arabic text-primary/80">المنتجات</h3>
+            </div>
+          </div>
 
           {products.length === 0 ? (
-            <div className="bg-muted p-6 rounded-lg text-center">
-              <p className="text-muted-foreground">This distributor hasn't added any products yet.</p>
+            <div className="bg-secondary/50 p-8 rounded-xl text-center subtle-gradient-card">
+              <ShoppingBag className="h-12 w-12 mx-auto mb-4 text-primary/60" />
+              <h3 className="text-xl font-medium mb-1">No products listed</h3>
+              <h4 className="text-lg font-medium font-arabic mb-3">لا توجد منتجات مدرجة</h4>
+              <p className="text-muted-foreground">This distributor hasn't listed any products yet.</p>
+              <p className="text-muted-foreground font-arabic mt-1">لم يقم هذا الموزع بإدراج أي منتجات بعد.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product) => (
                 <ProductCard
                   key={product.id}

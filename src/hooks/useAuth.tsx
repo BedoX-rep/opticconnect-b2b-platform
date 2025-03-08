@@ -12,6 +12,7 @@ type AuthContextType = {
   signUp: (email: string, password: string, userData: any) => Promise<void>;
   signOut: () => Promise<void>;
   isAuthenticated: boolean;
+  loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -28,6 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
+      setLoading(false);
     });
 
     // Listen for auth changes
@@ -36,6 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
+        setLoading(false);
       }
     );
 
@@ -68,10 +72,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           { 
             id: authData.user.id,
             name: userData.businessName,
+            email: email,
             city: userData.city,
             phone: userData.phone,
-            bio: userData.bio,
-            image: userData.image || null
+            bio: userData.bio || '',
+            image_url: userData.image_url || null
           }
         ]);
       
@@ -149,6 +154,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         session,
         isLoading,
+        loading,
         signIn,
         signUp,
         signOut,

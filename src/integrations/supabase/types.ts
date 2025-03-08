@@ -9,7 +9,98 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      distributors: {
+        Row: {
+          bio: string
+          city: string
+          created_at: string | null
+          email: string | null
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          name: string
+          phone: string
+          updated_at: string | null
+        }
+        Insert: {
+          bio: string
+          city: string
+          created_at?: string | null
+          email?: string | null
+          featured?: boolean | null
+          id: string
+          image_url?: string | null
+          name: string
+          phone: string
+          updated_at?: string | null
+        }
+        Update: {
+          bio?: string
+          city?: string
+          created_at?: string | null
+          email?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          phone?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          distributor_id: string
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          min_quantity: number
+          name: string
+          price: number
+          quantity: number
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          distributor_id: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          min_quantity?: number
+          name: string
+          price: number
+          quantity?: number
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          distributor_id?: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          min_quantity?: number
+          name?: string
+          price?: number
+          quantity?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_distributor_id_fkey"
+            columns: ["distributor_id"]
+            isOneToOne: false
+            referencedRelation: "distributors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

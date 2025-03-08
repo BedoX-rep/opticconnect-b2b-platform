@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
-import { Badge } from './ui/badge';
-import { Card, CardContent } from './ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface ProductCardProps {
   id: string;
@@ -75,7 +76,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 Min: {min_quantity} pcs
               </div>
             </div>
-          </div>
+          </CardContent>
 
         {distributor_name && (
           <div className="px-5 pb-4">

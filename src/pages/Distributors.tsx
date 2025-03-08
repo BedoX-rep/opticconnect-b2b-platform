@@ -108,8 +108,8 @@ const Distributors = () => {
                 <SelectContent>
                   <SelectItem value="">All Cities</SelectItem>
                   {cities.map((city) => (
-                    <SelectItem key={city} value={city}>
-                      {city}
+                    <SelectItem key={city} value={city || "unknown"}>
+                      {city || "Unknown"}
                     </SelectItem>
                   ))}
                 </SelectContent>

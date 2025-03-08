@@ -14,7 +14,7 @@ const SupabaseStatus = () => <div>Supabase Connection Status: (Implementation ne
 const Distributors = () => {
   const [distributors, setDistributors] = useState<DistributorProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCity, setSelectedCity] = useState<string>('');
+  const [selectedCity, setSelectedCity] = useState<string>('all');
   const [cities, setCities] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
@@ -62,15 +62,17 @@ const Distributors = () => {
   };
 
   const filteredDistributors = distributors.filter(distributor => {
-    const matchesSearchTerm = distributor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearchTerm = distributor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                              (distributor.bio && distributor.bio.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCity = selectedCity ? distributor.city === selectedCity : true;
+    const matchesCity = selectedCity && selectedCity !== 'all' ? 
+                        distributor.city?.toLowerCase() === selectedCity.toLowerCase() : 
+                        true;
     return matchesSearchTerm && matchesCity;
   });
 
   const handleClearFilters = () => {
     setSearchTerm('');
-    setSelectedCity('');
+    setSelectedCity('all');
   };
 
   return (
@@ -106,7 +108,7 @@ const Distributors = () => {
                   <SelectValue placeholder="Filter by city" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Cities</SelectItem>
+                  <SelectItem value="all">All Cities</SelectItem>
                   {cities.map((city) => (
                     <SelectItem key={city} value={city || "unknown"}>
                       {city || "Unknown"}

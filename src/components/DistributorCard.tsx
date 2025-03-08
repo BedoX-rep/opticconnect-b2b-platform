@@ -64,15 +64,6 @@ const DistributorCard: React.FC<DistributorProps> = ({
           </Button>
         </div>
       </CardContent>
-
-      {phone && (
-        <CardFooter className="p-4 pt-0 border-t">
-          <div className="flex items-center text-sm">
-            <Phone className="h-3 w-3 mr-1" />
-            <a href={`tel:${phone}`} className="hover:underline">{phone}</a>
-          </div>
-        </CardFooter>
-      )}
     </Card>
   );
 };

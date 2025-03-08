@@ -44,21 +44,20 @@ const Products = () => {
         .from('products')
         .select(`
           *,
-          distributors:distributor_id (name)
+          distributors:distributorId (name)
         `);
 
       if (error) throw error;
 
       if (data) {
-        console.log('Fetched products:', data);
         // Format the data to match ProductProps
         const formattedData = data.map(item => ({
           id: item.id,
           name: item.name,
-          image: item.image_url, // Fixed field name
+          image: item.image,
           price: item.price,
-          minQuantity: item.min_quantity, // Fixed field name
-          distributorId: item.distributor_id, // Fixed field name
+          minQuantity: item.minQuantity,
+          distributorId: item.distributorId,
           distributorName: item.distributors?.name || 'Unknown',
           category: item.category,
           featured: item.featured || false

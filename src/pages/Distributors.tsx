@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
@@ -7,6 +6,10 @@ import DistributorCard, { DistributorProps } from '@/components/DistributorCard'
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+// Placeholder for SupabaseStatus component -  needs actual implementation
+const SupabaseStatus = () => <div>Supabase Connection Status: (Implementation needed)</div>;
+
 
 const Distributors = () => {
   const [distributors, setDistributors] = useState<DistributorProps[]>([]);
@@ -25,14 +28,15 @@ const Distributors = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('distributors')
-        .select('*');
+        .select('*') // Assuming this select statement is correct.  May need adjustment based on database schema.
+        .throwOnError(); // Added throwOnError for explicit error handling
 
       if (error) throw error;
 
       if (data) {
         console.log('Fetched distributors:', data);
         setDistributors(data);
-        
+
         // Extract unique cities for filter
         const uniqueCities = [...new Set(data.map(distributor => distributor.city).filter(Boolean))];
         setCities(uniqueCities);
@@ -65,6 +69,7 @@ const Distributors = () => {
     <div className="min-h-screen py-12 px-4 sm:px-6 animate-fade-in">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
+          <SupabaseStatus /> {/* Added SupabaseStatus component */}
           <h1 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
             Optical Eyewear Distributors
           </h1>
@@ -85,7 +90,7 @@ const Distributors = () => {
                 className="pl-9"
               />
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <MapPin className="h-4 w-4 text-muted-foreground" />
               <Select value={selectedCity} onValueChange={setSelectedCity}>
@@ -102,7 +107,7 @@ const Distributors = () => {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div>
               <Button 
                 variant="outline" 

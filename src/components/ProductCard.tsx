@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Eye, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -7,11 +6,11 @@ import { cn } from '@/lib/utils';
 export interface ProductProps {
   id: string;
   name: string;
-  image: string;
+  image?: string; // Renamed from image_url in the formatter
   price: number;
-  minQuantity: number;
-  distributorId: string;
-  distributorName: string;
+  minQuantity: number; // Renamed from min_quantity in the formatter
+  distributorId: string; // Renamed from distributor_id in the formatter
+  distributorName?: string;
   category?: string;
   featured?: boolean;
 }
@@ -27,7 +26,7 @@ const ProductCard = ({
   featured = false,
 }: ProductProps) => {
   const defaultImage = 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
-  
+
   return (
     <div
       className={cn(
@@ -51,7 +50,7 @@ const ProductCard = ({
             className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          
+
           {/* Quick actions overlay */}
           <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <Link

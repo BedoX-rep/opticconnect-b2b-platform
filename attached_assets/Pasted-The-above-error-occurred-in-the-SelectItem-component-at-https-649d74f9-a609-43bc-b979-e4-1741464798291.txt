@@ -1,0 +1,89 @@
+The above error occurred in the <SelectItem> component:
+
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/@radix-ui_react-select.js?v=7ada1d88:839:7
+    at _c8 (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/components/ui/select.tsx:223:60)
+    at div
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-VNAZQ33N.js?v=105ae867:41:13
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:52:11
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:33:11
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-SXBBHXIZ.js?v=105ae867:98:15
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/@radix-ui_react-select.js?v=7ada1d88:750:13
+    at div
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:52:11
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:33:11
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-SXBBHXIZ.js?v=105ae867:98:15
+    at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-WI62CZZZ.js?v=105ae867:38:15)
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/@radix-ui_react-select.js?v=7ada1d88:294:58
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:52:11
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:33:11
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-VNAZQ33N.js?v=105ae867:41:13
+    at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-Y6IIBJD6.js?v=105ae867:258:22
+    at SelectPortal
+    at _c4 (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/components/ui/select.tsx:130:63)
+    at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-WI62CZZZ.js?v=105ae867:38:15)
+    at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-SXBBHXIZ.js?v=105ae867:28:15)
+    at CollectionProvider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-SXBBHXIZ.js?v=105ae867:89:13)
+    at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-WI62CZZZ.js?v=105ae867:38:15)
+    at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-W7STS36A.js?v=105ae867:1905:15)
+    at Popper (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-W7STS36A.js?v=105ae867:1962:11)
+    at Select (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/@radix-ui_react-select.js?v=7ada1d88:82:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at Distributors (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/pages/Distributors.tsx?t=1741464652967:37:45)
+    at AppLayout (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/App.tsx?t=1741464652967:76:22)
+    at RenderedRoute (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=360e421a:4069:5)
+    at Routes (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=360e421a:4508:5)
+    at Router (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=360e421a:4451:15)
+    at BrowserRouter (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=360e421a:5196:5)
+    at AuthProvider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/hooks/useAuth.tsx:15:32)
+    at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-WI62CZZZ.js?v=105ae867:38:15)
+    at TooltipProvider…
+
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/@radix-ui_react-select.js?v=7ada1d88:839:7
+at _c8 (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/components/ui/select.tsx:223:60)
+at div
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-VNAZQ33N.js?v=105ae867:41:13
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:52:11
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:33:11
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-SXBBHXIZ.js?v=105ae867:98:15
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/@radix-ui_react-select.js?v=7ada1d88:750:13
+at div
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:52:11
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:33:11
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-SXBBHXIZ.js?v=105ae867:98:15
+at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-WI62CZZZ.js?v=105ae867:38:15)
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/@radix-ui_react-select.js?v=7ada1d88:294:58
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:52:11
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-L3SKXKGI.js?v=105ae867:33:11
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-VNAZQ33N.js?v=105ae867:41:13
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-Y6IIBJD6.js?v=105ae867:258:22
+at SelectPortal
+at _c4 (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/components/ui/select.tsx:130:63)
+at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-WI62CZZZ.js?v=105ae867:38:15)
+at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-SXBBHXIZ.js?v=105ae867:28:15)
+at CollectionProvider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-SXBBHXIZ.js?v=105ae867:89:13)
+at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-WI62CZZZ.js?v=105ae867:38:15)
+at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-W7STS36A.js?v=105ae867:1905:15)
+at Popper (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-W7STS36A.js?v=105ae867:1962:11)
+at Select (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/@radix-ui_react-select.js?v=7ada1d88:82:5)
+at div
+at div
+at div
+at div
+at div
+at Distributors (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/pages/Distributors.tsx?t=1741464652967:37:45)
+at AppLayout (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/App.tsx?t=1741464652967:76:22)
+at RenderedRoute (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=360e421a:4069:5)
+at Routes (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=360e421a:4508:5)
+at Router (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=360e421a:4451:15)
+at BrowserRouter (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=360e421a:5196:5)
+at AuthProvider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/src/hooks/useAuth.tsx:15:32)
+at Provider (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/node_modules/.vite/deps/chunk-WI62CZZZ.js?v=105ae867:38:15)
+at TooltipProvider…
+at t.value (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://649d74f9-a609-43bc-b979-e4d093ac42c2-00-1uqpi14xh9evj.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 export interface DistributorProps {
   id: string;
   name: string;
-  image: string;
+  image?: string;
   city: string;
   phone: string;
   bio: string;
@@ -23,6 +23,8 @@ const DistributorCard = ({
   bio, 
   featured = false 
 }: DistributorProps) => {
+  const defaultImage = 'https://images.unsplash.com/photo-1577803645773-f96470509666?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+  
   return (
     <div 
       className={cn(
@@ -42,7 +44,7 @@ const DistributorCard = ({
         <div className="relative h-64 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
           <img 
-            src={image} 
+            src={image || defaultImage} 
             alt={name} 
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

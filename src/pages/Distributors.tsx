@@ -1,171 +1,137 @@
 
-import React, { useEffect, useState } from 'react';
-import { MapPin, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useToast } from '@/components/ui/use-toast';
+import { Search, MapPin } from 'lucide-react';
 import DistributorCard, { DistributorProps } from '@/components/DistributorCard';
-
-// Sample data - in a real app, this would come from a database
-const allDistributors: DistributorProps[] = [
-  {
-    id: '1',
-    name: 'OptiVision',
-    image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    city: 'Casablanca',
-    phone: '+212 522-123456',
-    bio: 'Premium eyewear distributor specializing in designer frames and sunglasses from top international brands.',
-    featured: true
-  },
-  {
-    id: '2',
-    name: 'Moroccan Lens Co.',
-    image: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    city: 'Rabat',
-    phone: '+212 537-789012',
-    bio: 'Specialized in high-quality optical lenses and frames with a focus on affordable luxury and exceptional service.',
-    featured: true
-  },
-  {
-    id: '3',
-    name: 'EyeStyle Maroc',
-    image: 'https://images.unsplash.com/photo-1577803645773-f96470509666?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    city: 'Marrakech',
-    phone: '+212 524-345678',
-    bio: 'Offering contemporary and traditional eyewear designs that blend Moroccan craftsmanship with modern technology.',
-    featured: true
-  },
-  {
-    id: '4',
-    name: 'Glasses Emporium',
-    image: 'https://images.unsplash.com/photo-1509695507497-903c140c43b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    city: 'Tangier',
-    phone: '+212 539-567890',
-    bio: 'Wide range of affordable and luxury eyewear options for all ages with a focus on excellent customer service.',
-    featured: false
-  },
-  {
-    id: '5',
-    name: 'Vision Plus',
-    image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    city: 'Fez',
-    phone: '+212 535-123456',
-    bio: 'Family-owned business with over 30 years of experience in the eyewear industry, offering personalized service.',
-    featured: false
-  },
-  {
-    id: '6',
-    name: 'Clear View Optics',
-    image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    city: 'Agadir',
-    phone: '+212 528-789012',
-    bio: 'Specializing in premium optical solutions with a wide range of designer frames and cutting-edge lens technology.',
-    featured: false
-  }
-];
-
-// List of Moroccan cities for filtering
-const cities = ['All Cities', 'Casablanca', 'Rabat', 'Marrakech', 'Tangier', 'Fez', 'Agadir'];
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const Distributors = () => {
-  const [filteredDistributors, setFilteredDistributors] = useState<DistributorProps[]>(allDistributors);
+  const [distributors, setDistributors] = useState<DistributorProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCity, setSelectedCity] = useState('All Cities');
+  const [selectedCity, setSelectedCity] = useState<string>('');
+  const [cities, setCities] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
-  // Reset scroll position when component mounts
   useEffect(() => {
-    window.scrollTo(0, 0);
+    fetchDistributors();
   }, []);
 
-  // Handle search and filtering
-  useEffect(() => {
-    let results = allDistributors;
-    
-    // Filter by search term
-    if (searchTerm) {
-      results = results.filter(distributor => 
-        distributor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        distributor.bio.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  const fetchDistributors = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('distributors')
+        .select('*');
+
+      if (error) throw error;
+
+      if (data) {
+        setDistributors(data);
+        
+        // Extract unique cities for filter
+        const uniqueCities = [...new Set(data.map(distributor => distributor.city))];
+        setCities(uniqueCities);
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error fetching distributors',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
     }
-    
-    // Filter by city
-    if (selectedCity !== 'All Cities') {
-      results = results.filter(distributor => distributor.city === selectedCity);
-    }
-    
-    setFilteredDistributors(results);
-  }, [searchTerm, selectedCity]);
+  };
+
+  const filteredDistributors = distributors.filter(distributor => {
+    const matchesSearchTerm = distributor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                             distributor.bio.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCity = selectedCity ? distributor.city === selectedCity : true;
+    return matchesSearchTerm && matchesCity;
+  });
+
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setSelectedCity('');
+  };
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-6 bg-secondary/30 animate-fade-in">
+    <div className="min-h-screen py-12 px-4 sm:px-6 animate-fade-in">
       <div className="max-w-7xl mx-auto">
-        {/* Page Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight mb-4">Eyewear Distributors</h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Connect with the best optical eyewear distributors across Morocco
+          <h1 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
+            Optical Eyewear Distributors
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Connect with Morocco's finest eyewear distributors
           </p>
         </div>
-        
-        {/* Search and Filter Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-border p-6 mb-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Search Input */}
+
+        {/* Filters and Search */}
+        <div className="bg-card rounded-xl shadow-sm p-4 mb-8 border">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search size={18} className="text-muted-foreground" />
-              </div>
-              <input
-                type="text"
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
                 placeholder="Search distributors..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="pl-9"
               />
             </div>
             
-            {/* City Filter */}
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MapPin size={18} className="text-muted-foreground" />
-              </div>
-              <select
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none bg-transparent"
+            <div className="flex items-center space-x-2">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <Select value={selectedCity} onValueChange={setSelectedCity}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Filter by city" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Cities</SelectItem>
+                  {cities.map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Button 
+                variant="outline" 
+                onClick={handleClearFilters}
+                className="w-full"
               >
-                {cities.map(city => (
-                  <option key={city} value={city}>{city}</option>
-                ))}
-              </select>
+                Clear Filters
+              </Button>
             </div>
           </div>
         </div>
-        
-        {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-sm text-muted-foreground">
-            Showing {filteredDistributors.length} distributors
-          </p>
-        </div>
-        
+
         {/* Distributors Grid */}
-        {filteredDistributors.length > 0 ? (
+        {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredDistributors.map(distributor => (
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="h-[420px] rounded-xl bg-card animate-pulse border" />
+            ))}
+          </div>
+        ) : filteredDistributors.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredDistributors.map((distributor) => (
               <DistributorCard key={distributor.id} {...distributor} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <p className="text-lg text-muted-foreground mb-6">No distributors found matching your criteria.</p>
-            <button
-              onClick={() => {
-                setSearchTerm('');
-                setSelectedCity('All Cities');
-              }}
-              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              Reset Filters
-            </button>
+          <div className="text-center py-12">
+            <h3 className="text-lg font-medium text-foreground mb-2">No distributors found</h3>
+            <p className="text-muted-foreground">
+              Try adjusting your search filters
+            </p>
           </div>
         )}
       </div>

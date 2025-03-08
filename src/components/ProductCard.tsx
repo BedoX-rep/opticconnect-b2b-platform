@@ -12,6 +12,7 @@ export interface ProductProps {
   minQuantity: number;
   distributorId: string;
   distributorName: string;
+  category?: string;
   featured?: boolean;
 }
 
@@ -25,6 +26,8 @@ const ProductCard = ({
   distributorName,
   featured = false,
 }: ProductProps) => {
+  const defaultImage = 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+  
   return (
     <div
       className={cn(
@@ -43,7 +46,7 @@ const ProductCard = ({
       <Link to={`/products/${id}`}>
         <div className="relative h-64 overflow-hidden bg-secondary/30">
           <img
-            src={image}
+            src={image || defaultImage}
             alt={name}
             className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
           />

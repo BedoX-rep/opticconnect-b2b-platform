@@ -1,299 +1,256 @@
 
-import React, { useEffect, useState } from 'react';
-import { Search, Filter, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useToast } from '@/components/ui/use-toast';
+import { Search, Filter, Check } from 'lucide-react';
 import ProductCard, { ProductProps } from '@/components/ProductCard';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
-// Sample data - in a real app, this would come from a database
-const allProducts: ProductProps[] = [
-  {
-    id: '1',
-    name: 'Premium Titanium Frames',
-    image: 'https://images.unsplash.com/photo-1577803645773-f96470509666?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    price: 1200,
-    minQuantity: 10,
-    distributorId: '1',
-    distributorName: 'OptiVision',
-    featured: true
-  },
-  {
-    id: '2',
-    name: 'Designer Sunglasses Collection',
-    image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    price: 890,
-    minQuantity: 5,
-    distributorId: '2',
-    distributorName: 'Moroccan Lens Co.',
-    featured: true
-  },
-  {
-    id: '3',
-    name: 'Photochromic Lenses - Premium',
-    image: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    price: 650,
-    minQuantity: 20,
-    distributorId: '3',
-    distributorName: 'EyeStyle Maroc',
-    featured: true
-  },
-  {
-    id: '4',
-    name: 'Slim Acetate Frames',
-    image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    price: 780,
-    minQuantity: 8,
-    distributorId: '1',
-    distributorName: 'OptiVision',
-    featured: true
-  },
-  {
-    id: '5',
-    name: 'Children\'s Eyewear Collection',
-    image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    price: 450,
-    minQuantity: 15,
-    distributorId: '4',
-    distributorName: 'Glasses Emporium',
-    featured: false
-  },
-  {
-    id: '6',
-    name: 'Anti-Blue Light Glasses',
-    image: 'https://images.unsplash.com/photo-1509695507497-903c140c43b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    price: 520,
-    minQuantity: 12,
-    distributorId: '5',
-    distributorName: 'Vision Plus',
-    featured: false
-  },
-  {
-    id: '7',
-    name: 'Sports Eyewear Collection',
-    image: 'https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    price: 980,
-    minQuantity: 6,
-    distributorId: '6',
-    distributorName: 'Clear View Optics',
-    featured: false
-  },
-  {
-    id: '8',
-    name: 'Luxury Gold-Plated Frames',
-    image: 'https://images.unsplash.com/photo-1508296695146-257a814070b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    price: 1850,
-    minQuantity: 3,
-    distributorId: '1',
-    distributorName: 'OptiVision',
-    featured: false
-  }
-];
-
-// Categories for filtering
-const categories = ['All Categories', 'Frames', 'Sunglasses', 'Lenses', 'Accessories'];
-
-// Sort options
-const sortOptions = [
-  { label: 'Newest', value: 'newest' },
-  { label: 'Price: Low to High', value: 'price_asc' },
-  { label: 'Price: High to Low', value: 'price_desc' }
+// Sample categories for optical products
+const CATEGORIES = [
+  "Frames",
+  "Sunglasses",
+  "Lenses",
+  "Contact Lenses",
+  "Accessories",
+  "Cleaning Products",
+  "Cases"
 ];
 
 const Products = () => {
-  const [filteredProducts, setFilteredProducts] = useState<ProductProps[]>(allProducts);
+  const [products, setProducts] = useState<ProductProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
-  const [selectedSort, setSelectedSort] = useState('newest');
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 2000 });
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
+  const [sortBy, setSortBy] = useState('newest');
+  const [isLoading, setIsLoading] = useState(true);
+  const [maxPrice, setMaxPrice] = useState(5000);
+  const { toast } = useToast();
 
-  // Reset scroll position when component mounts
   useEffect(() => {
-    window.scrollTo(0, 0);
+    fetchProducts();
   }, []);
 
-  // Handle search, filtering and sorting
-  useEffect(() => {
-    let results = allProducts;
-    
-    // Filter by search term
-    if (searchTerm) {
-      results = results.filter(product => 
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.distributorName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    
-    // Filter by category (in a real app, products would have categories)
-    if (selectedCategory !== 'All Categories') {
-      // This is a simplification since our sample data doesn't have categories
-      // In a real app, you would filter by the actual category field
-      results = results.filter(product => 
-        product.name.toLowerCase().includes(selectedCategory.toLowerCase())
-      );
-    }
-    
-    // Filter by price range
-    results = results.filter(product => 
-      product.price >= priceRange.min && product.price <= priceRange.max
-    );
-    
-    // Sort results
-    switch (selectedSort) {
-      case 'price_asc':
-        results.sort((a, b) => a.price - b.price);
-        break;
-      case 'price_desc':
-        results.sort((a, b) => b.price - a.price);
-        break;
-      case 'newest':
-      default:
-        // For this example, we'll assume the order in the array is the "newest" order
-        break;
-    }
-    
-    setFilteredProducts(results);
-  }, [searchTerm, selectedCategory, selectedSort, priceRange]);
+  const fetchProducts = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          distributors:distributorId (name)
+        `);
 
-  // Handle price range input
-  const handlePriceRangeChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'min' | 'max') => {
-    const value = parseInt(e.target.value) || 0;
-    setPriceRange(prev => ({
-      ...prev,
-      [type]: value
-    }));
+      if (error) throw error;
+
+      if (data) {
+        // Format the data to match ProductProps
+        const formattedData = data.map(item => ({
+          id: item.id,
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          minQuantity: item.minQuantity,
+          distributorId: item.distributorId,
+          distributorName: item.distributors?.name || 'Unknown',
+          category: item.category,
+          featured: item.featured || false
+        }));
+
+        setProducts(formattedData);
+
+        // Find the highest price for the slider
+        const highestPrice = Math.max(...formattedData.map(p => p.price), 5000);
+        setMaxPrice(highestPrice);
+        setPriceRange([0, highestPrice]);
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error fetching products',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
+
+  const sortProducts = (products: ProductProps[]) => {
+    switch (sortBy) {
+      case 'newest':
+        return [...products]; // Assuming products are already sorted by newest
+      case 'price-low':
+        return [...products].sort((a, b) => a.price - b.price);
+      case 'price-high':
+        return [...products].sort((a, b) => b.price - a.price);
+      default:
+        return products;
+    }
+  };
+
+  const filteredProducts = sortProducts(
+    products.filter(product => {
+      const matchesSearchTerm = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+      const matchesPriceRange = product.price >= priceRange[0] && product.price <= priceRange[1];
+      return matchesSearchTerm && matchesCategory && matchesPriceRange;
+    })
+  );
+
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setSelectedCategories([]);
+    setPriceRange([0, maxPrice]);
+    setSortBy('newest');
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-6 bg-secondary/30 animate-fade-in">
+    <div className="min-h-screen py-12 px-4 sm:px-6 animate-fade-in">
       <div className="max-w-7xl mx-auto">
-        {/* Page Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight mb-4">Eyewear Products</h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Discover a wide range of quality optical products for your retail business
+          <h1 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
+            Optical Eyewear Products
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Browse through a wide selection of premium optical products
           </p>
         </div>
-        
-        {/* Search and Filter Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-border p-6 mb-10">
-          <div className="flex flex-col space-y-4">
-            {/* Search and Filter Toggle Row */}
-            <div className="flex flex-col md:flex-row md:items-center gap-4">
-              {/* Search Input */}
-              <div className="relative flex-grow">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search size={18} className="text-muted-foreground" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              
-              {/* Filter Toggle Button */}
-              <button
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="flex items-center justify-center space-x-2 px-4 py-3 bg-secondary text-foreground rounded-lg md:w-auto"
-              >
-                <Filter size={18} />
-                <span>Filters</span>
-                <ChevronDown
-                  size={16}
-                  className={`transform transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}
-                />
-              </button>
-              
-              {/* Sort Select */}
-              <div className="relative md:w-1/4">
-                <select
-                  value={selectedSort}
-                  onChange={(e) => setSelectedSort(e.target.value)}
-                  className="w-full px-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none bg-transparent"
-                >
-                  {sortOptions.map(option => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <ChevronDown size={16} className="text-muted-foreground" />
-                </div>
-              </div>
+
+        {/* Filters and Search */}
+        <div className="bg-card rounded-xl shadow-sm p-4 mb-8 border">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9"
+              />
             </div>
             
-            {/* Expanded Filter Options */}
-            <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 overflow-hidden transition-all duration-300 ${isFilterOpen ? 'max-h-96 pt-4 border-t border-border' : 'max-h-0'}`}>
-              {/* Category Filter */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Category</label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-4 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                >
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-              </div>
-              
-              {/* Price Range Min */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Min Price (MAD)</label>
-                <input
-                  type="number"
-                  value={priceRange.min}
-                  onChange={(e) => handlePriceRangeChange(e, 'min')}
-                  min="0"
-                  max={priceRange.max}
-                  className="w-full px-4 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              
-              {/* Price Range Max */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Max Price (MAD)</label>
-                <input
-                  type="number"
-                  value={priceRange.max}
-                  onChange={(e) => handlePriceRangeChange(e, 'max')}
-                  min={priceRange.min}
-                  className="w-full px-4 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
+            <div>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">Newest</SelectItem>
+                  <SelectItem value="price-low">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high">Price: High to Low</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full flex justify-between">
+                    <div className="flex items-center">
+                      <Filter className="mr-2 h-4 w-4" />
+                      <span>Categories</span>
+                    </div>
+                    <span className="bg-primary text-primary-foreground text-xs rounded-full px-2 py-1 ml-2">
+                      {selectedCategories.length}
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                  <div className="space-y-4">
+                    <h4 className="font-medium">Select Categories</h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      {CATEGORIES.map((category) => (
+                        <div key={category} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={category} 
+                            checked={selectedCategories.includes(category)}
+                            onCheckedChange={() => toggleCategory(category)}
+                          />
+                          <Label htmlFor={category}>{category}</Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+            
+            <div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full flex justify-between items-center">
+                    <span>Price Range</span>
+                    <span className="text-sm text-muted-foreground">
+                      {priceRange[0]} - {priceRange[1]} MAD
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                  <div className="space-y-4">
+                    <h4 className="font-medium">Price Range</h4>
+                    <Slider
+                      defaultValue={priceRange}
+                      min={0}
+                      max={maxPrice}
+                      step={50}
+                      value={priceRange}
+                      onValueChange={(value) => setPriceRange([value[0], value[1]])}
+                      className="py-4"
+                    />
+                    <div className="flex justify-between">
+                      <p>{priceRange[0]} MAD</p>
+                      <p>{priceRange[1]} MAD</p>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+            
+            <div className="md:col-span-3 lg:col-span-4">
+              <Button 
+                variant="secondary" 
+                onClick={handleClearFilters}
+                className="w-full sm:w-auto"
+              >
+                Clear All Filters
+              </Button>
             </div>
           </div>
         </div>
-        
-        {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-sm text-muted-foreground">
-            Showing {filteredProducts.length} products
-          </p>
-        </div>
-        
+
         {/* Products Grid */}
-        {filteredProducts.length > 0 ? (
+        {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map(product => (
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <div key={i} className="h-[360px] rounded-xl bg-card animate-pulse border" />
+            ))}
+          </div>
+        ) : filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredProducts.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <p className="text-lg text-muted-foreground mb-6">No products found matching your criteria.</p>
-            <button
-              onClick={() => {
-                setSearchTerm('');
-                setSelectedCategory('All Categories');
-                setSelectedSort('newest');
-                setPriceRange({ min: 0, max: 2000 });
-              }}
-              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              Reset Filters
-            </button>
+          <div className="text-center py-12">
+            <h3 className="text-lg font-medium text-foreground mb-2">No products found</h3>
+            <p className="text-muted-foreground">
+              Try adjusting your search filters
+            </p>
           </div>
         )}
       </div>

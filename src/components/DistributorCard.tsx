@@ -29,31 +29,39 @@ const DistributorCard: React.FC<DistributorProps> = ({
   featured
 }) => {
   return (
-    <Card className="overflow-hidden h-full flex flex-col modern-card card-hover-effect dir-rtl"> {/* Added dir-rtl for RTL support */}
-      <CardContent className="p-0">
-        <div className="relative aspect-video w-full overflow-hidden bg-gray-100 rounded-t-lg">
-          <img
-            src={image_url || "/placeholder.svg"}
-            alt={name}
-            className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
-          />
+    <Card className="h-full flex flex-col transition-all hover:shadow-md">
+      <CardContent className="p-4 flex-grow">
+        <div className="flex items-center mb-4">
+          <Avatar className="h-12 w-12 mr-4">
+            <AvatarImage src={image_url || ''} alt={name} />
+            <AvatarFallback>{name.slice(0, 2).toUpperCase()}</AvatarFallback>
+          </Avatar>
+          <div>
+            <h3 className="font-medium text-lg">{name}</h3>
+            {city && (
+              <div className="flex items-center text-muted-foreground text-sm">
+                <MapPin className="h-3 w-3 mr-1" />
+                {city}
+              </div>
+            )}
+          </div>
+          {featured && (
+            <Badge variant="outline" className="ml-auto text-xs">
+              Featured
+            </Badge>
+          )}
         </div>
-        <div className="p-5">
-          <h2 className="text-xl font-semibold font-arabic">{name}</h2>
-          <div className="flex items-center text-sm text-muted-foreground mt-2">
-            <MapPin className="h-3 w-3 mr-1 text-primary" />
-            <span className="font-arabic">{city || "موقع غير محدد"}</span>
-          </div>
-          <p className="mt-4 line-clamp-3 text-sm font-arabic">{bio || "لا يوجد وصف متاح"}</p>
-          <div className="mt-5">
-            <Button asChild className="w-full arabic-button bg-primary hover:bg-primary/90">
-              <Link to={`/distributors/${id}`}>
-                <span className="font-arabic">عرض الملف الشخصي</span>
-                <span className="mx-1">|</span>
-                <span>View Profile</span>
-              </Link>
-            </Button>
-          </div>
+
+        {bio && (
+          <p className="text-muted-foreground text-sm line-clamp-3 mb-4">{bio}</p>
+        )}
+
+        <div className="mt-2">
+          <Button variant="outline" size="sm" asChild className="w-full">
+            <Link to={`/distributors/${id}`} className="flex items-center justify-center">
+              View Profile <ArrowUpRight className="ml-1 h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </CardContent>
     </Card>

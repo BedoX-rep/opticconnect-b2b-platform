@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Hero from '@/components/Hero';
 import FeaturedDistributors from '@/components/FeaturedDistributors';
@@ -38,44 +39,8 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col animate-fade-in">
       {/* Hero Section */}
-      <div className="py-20 hero-pattern">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-2 text-gradient">
-              Connect with Morocco's Premier Optical Distributors
-            </h1>
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-6 font-arabic text-gradient">
-              تواصل مع أفضل موزعي المنتجات البصرية في المغرب
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground">
-              OptiConnect brings together optical retailers and distributors 
-              in one platform, making it easier to discover products, connect 
-              with suppliers, and grow your business.
-            </p>
-            <p className="mt-3 text-lg text-muted-foreground font-arabic">
-              أوبتي كونكت تجمع بين تجار التجزئة والموزعين في مجال البصريات في منصة واحدة، 
-              مما يسهل اكتشاف المنتجات والتواصل مع الموردين وتنمية أعمالك.
-            </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="arabic-button bg-primary hover:bg-primary/90">
-                <Link to="/distributors">
-                  <span className="font-arabic">العثور على الموزعين</span>
-                  <span className="mx-1">|</span>
-                  <span>Find Distributors</span>
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="arabic-button">
-                <Link to="/products">
-                  <span className="font-arabic">تصفح المنتجات</span>
-                  <span className="mx-1">|</span>
-                  <span>Browse Products</span>
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <Hero />
+      
       {/* Why OpticConnect Section */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
@@ -85,7 +50,7 @@ const Index = () => {
               We're revolutionizing how optical retailers and distributors connect in Morocco
             </p>
           </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <div 
@@ -102,13 +67,13 @@ const Index = () => {
           </div>
         </div>
       </section>
-
+      
       {/* Featured Distributors Section */}
       <FeaturedDistributors />
-
+      
       {/* Featured Products Section */}
       <FeaturedProducts />
-
+      
       {/* Join Now CTA Section */}
       <section className="py-20 px-6 bg-gradient-to-r from-primary/5 to-primary/10">
         <div className="max-w-4xl mx-auto text-center">

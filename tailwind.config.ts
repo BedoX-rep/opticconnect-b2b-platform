@@ -21,7 +21,6 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: [
-					'Tajawal',
 					'-apple-system',
 					'BlinkMacSystemFont',
 					'San Francisco',
@@ -29,7 +28,6 @@ export default {
 					'Arial',
 					'sans-serif'
 				],
-				arabic: ['Tajawal', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

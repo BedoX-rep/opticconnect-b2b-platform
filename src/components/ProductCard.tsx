@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 interface ProductCardProps {
   id: string;
@@ -35,24 +34,24 @@ const ProductCard: React.FC<ProductCardProps> = ({
   }).format(price);
 
   return (
-    <Card className="overflow-hidden h-full flex flex-col modern-card card-hover-effect">
-      <Link to={`/product/${id}`} className="relative block">
-        <div className="aspect-square w-full overflow-hidden bg-gray-100 rounded-t-lg">
-          {image_url ? (
+    <Card className="overflow-hidden transition-all hover:shadow-md group h-full">
+      <CardContent className="p-0 h-full">
+        <Link to={`/product/${id}`} className="block">
+          {/* Product Image */}
+          <div className="h-48 bg-gray-100 flex items-center justify-center">
+            {image_url ? (
               <img
                 src={image_url}
                 alt={name}
-                className="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
+                className="w-full h-full object-cover transition-all group-hover:scale-105"
               />
             ) : (
               <ShoppingBag className="h-16 w-16 text-gray-300" />
             )}
-        </div>
-        {featured && (
-          <Badge className="absolute top-3 right-3 shadow-md bg-primary text-white font-arabic">متميز</Badge>
-        )}
-      </Link>
-      <CardContent className="flex-grow flex flex-col p-5">
+          </div>
+
+          {/* Content Section */}
+          <div className="p-5">
             <div className="flex justify-between items-start">
               <h3 className="font-semibold text-lg line-clamp-1">{name}</h3>
               {featured && (
@@ -76,7 +75,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 Min: {min_quantity} pcs
               </div>
             </div>
-          </CardContent>
+          </div>
+        </Link>
 
         {distributor_name && (
           <div className="px-5 pb-4">
@@ -88,6 +88,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </Link>
           </div>
         )}
+      </CardContent>
     </Card>
   );
 };

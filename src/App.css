@@ -1,122 +1,42 @@
-
-:root {
-  --shadow-color: 220 3% 15%;
-  --shadow-elevation-low:
-    0px 0.5px 0.6px hsl(var(--shadow-color) / 0.08),
-    0px 0.8px 1px -1.2px hsl(var(--shadow-color) / 0.11),
-    0px 2px 2.5px -2.5px hsl(var(--shadow-color) / 0.11);
-  --shadow-elevation-medium:
-    0px 0.5px 0.6px hsl(var(--shadow-color) / 0.1),
-    0px 1.7px 2.1px -0.8px hsl(var(--shadow-color) / 0.1),
-    0px 4.3px 5.3px -1.7px hsl(var(--shadow-color) / 0.1),
-    0px 10.4px 12.9px -2.5px hsl(var(--shadow-color) / 0.1);
-  --shadow-elevation-high:
-    0px 0.5px 0.6px hsl(var(--shadow-color) / 0.08),
-    0px 3.3px 4.1px -0.4px hsl(var(--shadow-color) / 0.07),
-    0px 6.2px 7.7px -0.7px hsl(var(--shadow-color) / 0.07),
-    0px 10.2px 12.6px -1.1px hsl(var(--shadow-color) / 0.06),
-    0px 16.5px 20.4px -1.4px hsl(var(--shadow-color) / 0.06),
-    0px 26px 32.2px -1.8px hsl(var(--shadow-color) / 0.05),
-    0px 39.6px 49px -2.1px hsl(var(--shadow-color) / 0.05),
-    0px 58.1px 71.9px -2.5px hsl(var(--shadow-color) / 0.04);
-}
-
-.modern-card {
-  background: hsl(var(--card));
-  border-radius: 12px;
-  box-shadow: var(--shadow-elevation-medium);
-  transition: all 0.2s ease-in-out;
-}
-
-.modern-card:hover {
-  box-shadow: var(--shadow-elevation-high);
-  transform: translateY(-2px);
-}
-
-.modern-gradient {
-  background: linear-gradient(135deg, hsl(var(--primary) / 0.9), hsl(215, 70%, 45%));
-}
-
-.modern-container {
+#root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 2rem;
+  text-align: center;
 }
 
-.rtl-support {
-  direction: rtl;
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.ltr-support {
-  direction: ltr;
-}
-
-.card-hover-effect {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-hover-effect:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.text-gradient {
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  background-image: linear-gradient(to right, hsl(var(--primary)), hsl(215, 70%, 45%));
-}
-
-.hero-pattern {
-  background-color: hsl(var(--background));
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-
-.section-padding {
-  padding: 5rem 0;
-}
-
-/* Custom Scrollbar for Arabic UI */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: hsl(var(--secondary) / 0.3);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary) / 0.6);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.8);
-}
-
-/* Arabic-friendly button styles */
-.arabic-button {
-  padding: 0.6rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.arabic-button:hover {
-  transform: translateY(-2px);
-}
-
-/* Cards with subtle gradients */
-.subtle-gradient-card {
-  background: linear-gradient(135deg, hsl(var(--card)), hsl(var(--card) / 0.95));
-  border: 1px solid hsl(var(--border) / 0.5);
-}
-
-/* Mobile optimizations */
-@media (max-width: 640px) {
-  .section-padding {
-    padding: 3rem 0;
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
   }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
 }

@@ -83,7 +83,6 @@ const Distributors = () => {
           <h1 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
             Optical Eyewear Distributors
           </h1>
-          <h2 className="text-2xl font-bold mb-8 font-arabic text-primary/80">موزعو المنتجات البصرية</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Connect with Morocco's finest eyewear distributors
           </p>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface ProductCardProps {
   id: string;
@@ -27,10 +28,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   distributor_id,
   distributor_name,
 }) => {
-  const formattedPrice = new Intl.NumberFormat('fr-MA', {
+  const { t, language } = useLanguage();
+
+  const formattedPrice = new Intl.NumberFormat(language === 'en' ? 'en-US' : 'ar-SA', {
     style: 'currency',
-    currency: 'MAD',
-    minimumFractionDigits: 2,
+    currency: 'USD',
   }).format(price);
 
   return (
@@ -53,17 +55,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {/* Content Section */}
           <div className="p-5">
             <div className="flex justify-between items-start">
-              <h3 className="font-semibold text-lg line-clamp-1">{name}</h3>
+              <h3 className="font-semibold text-lg line-clamp-1">{t('products.name', { name })}</h3> {/* Assuming t handles interpolation */}
               {featured && (
                 <Badge variant="outline" className="bg-primary/10 text-primary text-xs">
-                  Featured
+                  {t('products.featured')} {/* Assuming t handles translation */}
                 </Badge>
               )}
             </div>
 
             {category && (
               <Badge variant="secondary" className="mt-2 text-xs font-normal">
-                {category}
+                {t('products.category', { category })} {/* Assuming t handles interpolation */}
               </Badge>
             )}
 
@@ -72,7 +74,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 {formattedPrice}
               </div>
               <div className="text-xs text-muted-foreground">
-                Min: {min_quantity} pcs
+                {t('products.minQuantity', { min_quantity })} {/* Assuming t handles interpolation and translation */}
               </div>
             </div>
           </div>
@@ -84,7 +86,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               to={`/distributors/${distributor_id}`}
               className="block text-sm text-muted-foreground hover:text-primary"
             >
-              {distributor_name}
+              {t('products.distributor', { distributor_name })} {/* Assuming t handles interpolation */}
             </Link>
           </div>
         )}

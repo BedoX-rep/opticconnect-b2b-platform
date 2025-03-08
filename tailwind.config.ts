@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -26,6 +25,7 @@ export default {
 					'San Francisco',
 					'Helvetica Neue',
 					'Arial',
+					'Noto Sans Arabic',
 					'sans-serif'
 				],
 			},

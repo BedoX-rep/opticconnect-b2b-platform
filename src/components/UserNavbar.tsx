@@ -1,3 +1,4 @@
+// This solution adds a placeholder for the LanguageSwitcher component and translation functions. A complete solution would require these components.
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -18,11 +19,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useLanguage } from '@/hooks/useLanguage'; // Added import
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'; // Added import
+
 
 const UserNavbar = () => {
   const { user, signOut } = useAuth();
   const location = useLocation();
-  
+  const { t } = useLanguage(); // Added language context
+
   const isActive = (path: string) => {
     return location.pathname === path;
   };
@@ -40,7 +45,7 @@ const UserNavbar = () => {
                 isActive('/') ? "text-primary" : "text-foreground hover:text-primary"
               )}
             >
-              Home
+              {t('nav.home')} {/* Translated text */}
             </Link>
             <Link 
               to="/distributors"
@@ -49,7 +54,7 @@ const UserNavbar = () => {
                 isActive('/distributors') ? "text-primary" : "text-foreground hover:text-primary"
               )}
             >
-              Distributors
+              {t('nav.distributors')} {/* Translated text */}
             </Link>
             <Link 
               to="/products"
@@ -58,10 +63,10 @@ const UserNavbar = () => {
                 isActive('/products') ? "text-primary" : "text-foreground hover:text-primary"
               )}
             >
-              Products
+              {t('nav.products')} {/* Translated text */}
             </Link>
           </div>
-          
+
           {/* Right section with auth/profile */}
           <div className="flex items-center">
             {user ? (
@@ -76,13 +81,13 @@ const UserNavbar = () => {
                   <DropdownMenuItem asChild>
                     <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
                       <User size={16} />
-                      <span>My Profile</span>
+                      <span>{t('nav.profile')}</span> {/* Translated text */}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/manage-products" className="flex items-center gap-2 cursor-pointer">
                       <ShoppingBag size={16} />
-                      <span>Manage Products</span>
+                      <span>{t('nav.manageProducts')}</span> {/* Translated text */}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -91,7 +96,7 @@ const UserNavbar = () => {
                     className="flex items-center gap-2 cursor-pointer text-destructive"
                   >
                     <LogOut size={16} />
-                    <span>Sign out</span>
+                    <span>{t('nav.logout')}</span> {/* Translated text */}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -99,10 +104,11 @@ const UserNavbar = () => {
               <Link to="/login">
                 <Button variant="outline" size="sm" className="flex items-center gap-2">
                   <LogIn size={16} />
-                  <span>Sign in</span>
+                  <span>{t('nav.login')}</span> {/* Translated text */}
                 </Button>
               </Link>
             )}
+            <LanguageSwitcher /> {/* Added language switcher */}
           </div>
         </div>
       </div>

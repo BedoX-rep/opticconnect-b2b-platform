@@ -1,98 +1,95 @@
 import React from 'react';
-import { Eye, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
+import { ShoppingBag } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
-export interface ProductProps {
+interface ProductCardProps {
   id: string;
   name: string;
-  image?: string; // Renamed from image_url in the formatter
   price: number;
-  minQuantity: number; // Renamed from min_quantity in the formatter
-  distributorId: string; // Renamed from distributor_id in the formatter
-  distributorName?: string;
+  min_quantity?: number;
   category?: string;
+  image_url?: string | null;
   featured?: boolean;
+  distributor_id: string;
+  distributor_name?: string;
 }
 
-const ProductCard = ({
+const ProductCard: React.FC<ProductCardProps> = ({
   id,
   name,
-  image,
   price,
-  minQuantity,
-  distributorId,
-  distributorName,
+  min_quantity = 1,
+  category,
+  image_url,
   featured = false,
-}: ProductProps) => {
-  const defaultImage = 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+  distributor_id,
+  distributor_name,
+}) => {
+  const formattedPrice = new Intl.NumberFormat('fr-MA', {
+    style: 'currency',
+    currency: 'MAD',
+    minimumFractionDigits: 2,
+  }).format(price);
 
   return (
-    <div
-      className={cn(
-        "group h-full overflow-hidden rounded-xl transition-all duration-300 bg-white border border-border hover:shadow-lg relative",
-        featured && "ring-2 ring-primary/20"
-      )}
-    >
-      {featured && (
-        <div className="absolute top-3 right-3 z-10">
-          <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-1 rounded-full">
-            Featured
-          </span>
-        </div>
-      )}
-
-      <Link to={`/products/${id}`}>
-        <div className="relative h-64 overflow-hidden bg-secondary/30">
-          <img
-            src={image || defaultImage}
-            alt={name}
-            className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-          {/* Quick actions overlay */}
-          <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <Link
-              to={`/products/${id}`}
-              className="p-2 rounded-full bg-white/90 text-foreground hover:bg-primary hover:text-white transition-colors shadow-sm"
-            >
-              <Eye size={18} />
-            </Link>
-            <a
-              href={`tel:${distributorId}`}
-              className="p-2 rounded-full bg-white/90 text-foreground hover:bg-primary hover:text-white transition-colors shadow-sm"
-            >
-              <ShoppingCart size={18} />
-            </a>
+    <Card className="overflow-hidden transition-all hover:shadow-md group h-full">
+      <CardContent className="p-0 h-full">
+        <Link to={`/product/${id}`} className="block">
+          {/* Product Image */}
+          <div className="h-48 bg-gray-100 flex items-center justify-center">
+            {image_url ? (
+              <img
+                src={image_url}
+                alt={name}
+                className="w-full h-full object-cover transition-all group-hover:scale-105"
+              />
+            ) : (
+              <ShoppingBag className="h-16 w-16 text-gray-300" />
+            )}
           </div>
-        </div>
-      </Link>
 
-      <div className="p-5">
-        <Link to={`/products/${id}`}>
-          <h3 className="text-lg font-medium mb-2 group-hover:text-primary transition-colors line-clamp-1">
-            {name}
-          </h3>
+          {/* Content Section */}
+          <div className="p-5">
+            <div className="flex justify-between items-start">
+              <h3 className="font-semibold text-lg line-clamp-1">{name}</h3>
+              {featured && (
+                <Badge variant="outline" className="bg-primary/10 text-primary text-xs">
+                  Featured
+                </Badge>
+              )}
+            </div>
+
+            {category && (
+              <Badge variant="secondary" className="mt-2 text-xs font-normal">
+                {category}
+              </Badge>
+            )}
+
+            <div className="mt-4 flex items-center justify-between">
+              <div className="text-lg font-bold text-primary">
+                {formattedPrice}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Min: {min_quantity} pcs
+              </div>
+            </div>
+        </div>
         </Link>
 
-        <div className="flex items-center justify-between mb-3">
-          <span className="font-semibold">{price.toFixed(2)} MAD</span>
-          <span className="text-sm text-muted-foreground">
-            Min: {minQuantity} pcs
-          </span>
-        </div>
-
-        <div className="pt-3 border-t border-border">
-          <Link
-            to={`/distributors/${distributorId}`}
-            className="text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            {distributorName}
-          </Link>
-        </div>
-      </div>
-    </div>
+        {distributor_name && (
+          <div className="px-5 pb-4">
+            <Link 
+              to={`/distributor/${distributor_id}`} 
+              className="block text-sm text-muted-foreground hover:text-primary"
+            >
+              {distributor_name}
+            </Link>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

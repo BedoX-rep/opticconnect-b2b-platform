@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
@@ -12,13 +13,15 @@ import { DistributorProps } from '@/components/DistributorCard';
 interface Product {
   id: string;
   name: string;
-  image_url: string;
   price: number;
   min_quantity: number;
-  distributor_id: string;
-  distributors: { name: string };
   category: string;
+  image_url: string | null;
   featured: boolean;
+  distributor_id: string;
+  distributors?: {
+    name: string;
+  };
 }
 
 const DistributorDetail = () => {
@@ -46,7 +49,15 @@ const DistributorDetail = () => {
         .eq('id', id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching distributor:', error);
+        toast({
+          title: 'Error fetching distributor information',
+          description: error.message,
+          variant: 'destructive',
+        });
+        return;
+      }
 
       if (data) {
         setDistributor(data);
@@ -55,9 +66,11 @@ const DistributorDetail = () => {
       console.error('Error fetching distributor:', error);
       toast({
         title: 'Error fetching distributor information',
-        description: error.message,
+        description: error.message || 'Unknown error occurred',
         variant: 'destructive',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,49 +92,50 @@ const DistributorDetail = () => {
         .eq('distributor_id', id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching distributor products:', error);
+        toast({
+          title: 'Error fetching products',
+          description: error.message,
+          variant: 'destructive',
+        });
+        return;
+      }
 
       if (data) {
-        const formattedProducts = data.map(item => ({
-          ...item,
-          distributor_name: item.distributors.name
-        }));
-        
-        setProducts(formattedProducts);
+        console.log('Fetched distributor products:', data);
+        setProducts(data);
       }
     } catch (error: any) {
-      console.error('Error fetching products:', error);
+      console.error('Error fetching distributor products:', error);
       toast({
         title: 'Error fetching products',
-        description: error.message,
+        description: error.message || 'Unknown error occurred',
         variant: 'destructive',
       });
-    } finally {
-      setLoading(false);
     }
   };
 
-  const handleShareClick = () => {
-    if (navigator.share && distributor) {
+  const shareProfile = () => {
+    if (navigator.share) {
       navigator.share({
-        title: `${distributor.name} | OptiConnect`,
-        text: `Check out ${distributor.name} on OptiConnect!`,
+        title: `${distributor?.name} - OpticConnect`,
+        text: `Check out ${distributor?.name} on OpticConnect`,
         url: window.location.href,
-      }).catch(err => {
-        console.error('Error sharing:', err);
+      }).catch(error => {
+        console.error('Error sharing:', error);
       });
     } else {
-      navigator.clipboard.writeText(window.location.href);
       toast({
-        title: 'Link copied to clipboard',
-        description: 'You can now share this distributor\'s profile',
+        title: 'Share',
+        description: 'Sharing is not supported on this browser',
       });
     }
   };
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center">
+      <div className="flex justify-center items-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -129,148 +143,148 @@ const DistributorDetail = () => {
 
   if (!distributor) {
     return (
-      <div className="container py-12">
-        <div className="max-w-md mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-4">Distributor Not Found</h2>
-          <p className="text-muted-foreground mb-6">
-            The distributor you're looking for doesn't exist or has been removed.
-          </p>
-          <Link to="/distributors">
-            <Button>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Distributors
-            </Button>
-          </Link>
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">Distributor not found</h1>
+          <p className="mt-4">The distributor you're looking for doesn't exist or has been removed.</p>
+          <Button asChild className="mt-6">
+            <Link to="/distributors">Back to Distributors</Link>
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 animate-fade-in">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-6">
-          <Link 
-            to="/distributors" 
-            className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Distributors
-          </Link>
-        </div>
-        
-        {/* Distributor Header */}
-        <div className="relative rounded-xl overflow-hidden h-64 md:h-80 mb-6">
-          {distributor.image_url ? (
-            <>
-              <img 
-                src={distributor.image_url} 
-                alt={distributor.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            </>
-          ) : (
-            <div className="w-full h-full bg-gradient-to-r from-primary/30 to-primary/10 flex items-center justify-center">
-              <Building className="h-20 w-20 text-primary/40" />
+    <div className="container mx-auto px-4 py-8 animate-fade-in">
+      {/* Back Button */}
+      <Button variant="ghost" asChild className="mb-6">
+        <Link to="/distributors">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Distributors
+        </Link>
+      </Button>
+
+      {/* Distributor Profile */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Profile Header */}
+        <div className="md:col-span-2">
+          <div className="flex flex-col md:flex-row gap-6 items-start">
+            {/* Logo/Image */}
+            <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center overflow-hidden">
+              {distributor.image_url ? (
+                <img 
+                  src={distributor.image_url} 
+                  alt={distributor.name} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Building className="h-12 w-12 text-primary" />
+              )}
             </div>
-          )}
-          
-          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-            <h1 className="text-3xl md:text-4xl font-bold drop-shadow-sm">{distributor.name}</h1>
-            <div className="flex items-center mt-2">
-              <MapPin className="h-4 w-4 mr-1" />
-              <span>{distributor.city}</span>
-            </div>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Info Sidebar */}
-          <Card className="lg:col-span-1 h-fit">
-            <CardContent className="p-6">
-              <div className="flex justify-between items-start mb-6">
-                <h2 className="text-xl font-semibold">Contact Information</h2>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleShareClick}
-                  title="Share this distributor"
-                >
-                  <Share2 className="h-5 w-5" />
+            
+            {/* Basic Info */}
+            <div className="flex-1">
+              <div className="flex justify-between">
+                <h1 className="text-3xl font-bold">{distributor.name}</h1>
+                <Button variant="outline" size="icon" onClick={shareProfile}>
+                  <Share2 className="h-4 w-4" />
                 </Button>
               </div>
               
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Phone Number</h3>
-                  <a 
-                    href={`tel:${distributor.phone}`}
-                    className="flex items-center text-primary hover:text-primary/80 transition-colors"
-                  >
-                    <Phone className="h-4 w-4 mr-2" />
-                    {distributor.phone}
-                  </a>
+              {distributor.city && (
+                <div className="flex items-center mt-2 text-muted-foreground">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  <span>{distributor.city}</span>
                 </div>
-                
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Location</h3>
-                  <div className="flex items-center">
-                    <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
-                    {distributor.city}
-                  </div>
+              )}
+              
+              {distributor.phone && (
+                <div className="flex items-center mt-2 text-muted-foreground">
+                  <Phone className="h-4 w-4 mr-2" />
+                  <span>{distributor.phone}</span>
                 </div>
-                
-                <Separator />
-                
-                <div>
-                  <h3 className="text-sm font-medium mb-2">About</h3>
-                  <p className="text-muted-foreground">{distributor.bio}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          {/* Products section */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">Available Products</h2>
-              <div>
-                <span className="text-muted-foreground">
-                  {products.length} product{products.length !== 1 ? 's' : ''}
-                </span>
-              </div>
+              )}
+              
+              {distributor.bio && (
+                <p className="mt-4 text-muted-foreground">{distributor.bio}</p>
+              )}
             </div>
-            
-            {products.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {products.map(product => (
-                  <ProductCard 
-                    key={product.id}
-                    id={product.id}
-                    name={product.name}
-                    image={product.image_url}
-                    price={product.price}
-                    minQuantity={product.min_quantity}
-                    distributorId={product.distributor_id}
-                    distributorName={product.distributor_name}
-                    category={product.category}
-                    featured={product.featured}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 bg-secondary/20 rounded-xl">
-                <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-foreground mb-2">No products available</h3>
-                <p className="text-muted-foreground">
-                  This distributor hasn't added any products yet.
-                </p>
-              </div>
-            )}
           </div>
         </div>
+
+        {/* Contact Card */}
+        <div className="md:col-span-1">
+          <Card>
+            <CardContent className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
+              
+              {distributor.email && (
+                <div className="mb-4">
+                  <p className="text-sm font-medium mb-1">Email</p>
+                  <p className="text-muted-foreground">{distributor.email}</p>
+                </div>
+              )}
+              
+              {distributor.phone && (
+                <div className="mb-4">
+                  <p className="text-sm font-medium mb-1">Phone</p>
+                  <p className="text-muted-foreground">{distributor.phone}</p>
+                </div>
+              )}
+              
+              {distributor.city && (
+                <div>
+                  <p className="text-sm font-medium mb-1">Location</p>
+                  <p className="text-muted-foreground">{distributor.city}</p>
+                </div>
+              )}
+              
+              <Button className="w-full mt-6">
+                <ShoppingBag className="mr-2 h-4 w-4" />
+                View Products
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
+
+      <Separator className="my-8" />
+
+      {/* Products Section */}
+      <section>
+        <h2 className="text-2xl font-bold mb-6 flex items-center">
+          <ShoppingBag className="mr-2 h-5 w-5" />
+          Products
+        </h2>
+        
+        {products.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard 
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                price={product.price}
+                min_quantity={product.min_quantity}
+                category={product.category}
+                image_url={product.image_url}
+                featured={product.featured}
+                distributor_id={product.distributor_id}
+                distributor_name={distributor.name}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 border border-dashed rounded-lg">
+            <ShoppingBag className="mx-auto h-10 w-10 text-muted-foreground" />
+            <h3 className="mt-4 text-lg font-medium">No products yet</h3>
+            <p className="mt-2 text-muted-foreground">
+              This distributor hasn't added any products yet.
+            </p>
+          </div>
+        )}
+      </section>
     </div>
   );
 };

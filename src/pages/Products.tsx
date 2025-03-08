@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
@@ -31,6 +30,7 @@ const Products = () => {
   const [sortBy, setSortBy] = useState('newest');
   const [isLoading, setIsLoading] = useState(true);
   const [maxPrice, setMaxPrice] = useState(5000);
+  const [categories, setCategories] = useState<string[]>([]); // Added state for categories
   const { toast } = useToast();
 
   useEffect(() => {
@@ -40,41 +40,45 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setIsLoading(true);
+
       const { data, error } = await supabase
         .from('products')
         .select(`
-          *,
-          distributors:distributor_id (name)
-        `);
+          id,
+          name,
+          price,
+          min_quantity,
+          category,
+          image_url,
+          featured,
+          distributor_id,
+          distributors:distributor_id(name)
+        `)
+        .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching products:', error);
+        toast({
+          title: 'Error fetching products',
+          description: error.message,
+          variant: 'destructive',
+        });
+        return;
+      }
 
       if (data) {
         console.log('Fetched products:', data);
-        // Format the data to match ProductProps
-        const formattedData = data.map(item => ({
-          id: item.id,
-          name: item.name,
-          image: item.image_url, // Fixed field name
-          price: item.price,
-          minQuantity: item.min_quantity, // Fixed field name
-          distributorId: item.distributor_id, // Fixed field name
-          distributorName: item.distributors?.name || 'Unknown',
-          category: item.category,
-          featured: item.featured || false
-        }));
+        setProducts(data);
 
-        setProducts(formattedData);
-
-        // Find the highest price for the slider
-        const highestPrice = Math.max(...formattedData.map(p => p.price), 5000);
-        setMaxPrice(highestPrice);
-        setPriceRange([0, highestPrice]);
+        // Extract unique categories for filter
+        const uniqueCategories = [...new Set(data.map(product => product.category).filter(Boolean))];
+        setCategories(uniqueCategories);
       }
     } catch (error: any) {
+      console.error('Error fetching products:', error);
       toast({
         title: 'Error fetching products',
-        description: error.message,
+        description: error.message || 'Unknown error occurred',
         variant: 'destructive',
       });
     } finally {
@@ -143,7 +147,7 @@ const Products = () => {
                 className="pl-9"
               />
             </div>
-            
+
             <div>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger>
@@ -156,7 +160,7 @@ const Products = () => {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div>
               <Popover>
                 <PopoverTrigger asChild>
@@ -174,7 +178,7 @@ const Products = () => {
                   <div className="space-y-4">
                     <h4 className="font-medium">Select Categories</h4>
                     <div className="grid grid-cols-2 gap-3">
-                      {CATEGORIES.map((category) => (
+                      {categories.map((category) => ( // Use the dynamic categories
                         <div key={category} className="flex items-center space-x-2">
                           <Checkbox 
                             id={category} 
@@ -189,7 +193,7 @@ const Products = () => {
                 </PopoverContent>
               </Popover>
             </div>
-            
+
             <div>
               <Popover>
                 <PopoverTrigger asChild>
@@ -220,7 +224,7 @@ const Products = () => {
                 </PopoverContent>
               </Popover>
             </div>
-            
+
             <div className="md:col-span-3 lg:col-span-4">
               <Button 
                 variant="secondary" 

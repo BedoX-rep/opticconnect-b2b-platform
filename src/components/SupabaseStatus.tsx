@@ -17,10 +17,10 @@ const SupabaseStatus = () => {
       try {
         const result = await testSupabaseConnection();
         setStatus(result);
-      } catch (error) {
+      } catch (error: any) {
         setStatus({
           connected: false,
-          message: 'Failed to check Supabase connection',
+          message: `Failed to check Supabase connection: ${error?.message || 'Unknown error'}`,
           error
         });
       } finally {
@@ -52,7 +52,14 @@ const SupabaseStatus = () => {
           {status.connected ? 'Connected to Supabase' : 'Supabase Connection Issue'}
         </AlertTitle>
       </div>
-      <AlertDescription>{status.message}</AlertDescription>
+      <AlertDescription>
+        {status.message}
+        {status.error && (
+          <div className="mt-2 text-xs text-gray-500">
+            Error code: {status.error.code || 'Unknown'}
+          </div>
+        )}
+      </AlertDescription>
     </Alert>
   );
 };

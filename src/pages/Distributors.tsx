@@ -28,10 +28,18 @@ const Distributors = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('distributors')
-        .select('*') // Assuming this select statement is correct.  May need adjustment based on database schema.
-        .throwOnError(); // Added throwOnError for explicit error handling
+        .select('*')
+        .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching distributors:', error);
+        toast({
+          title: 'Error fetching distributors',
+          description: error.message,
+          variant: 'destructive',
+        });
+        return;
+      }
 
       if (data) {
         console.log('Fetched distributors:', data);
@@ -45,7 +53,7 @@ const Distributors = () => {
       console.error('Error fetching distributors:', error);
       toast({
         title: 'Error fetching distributors',
-        description: error.message,
+        description: error.message || 'Unknown error occurred',
         variant: 'destructive',
       });
     } finally {

@@ -7,17 +7,20 @@ import { supabase } from './supabase';
  */
 export const testSupabaseConnection = async () => {
   try {
-    // A simple query to check if we can connect
-    const { data, error } = await supabase.from('distributors').select('count()', { count: 'exact' });
+    // A simple query to check if we can connect - only using SELECT
+    const { data, error } = await supabase
+      .from('distributors')
+      .select('count()', { count: 'exact', head: true });
     
     if (error) {
+      console.error('Supabase connection test error:', error);
       throw error;
     }
     
     return {
       connected: true,
       message: 'Successfully connected to Supabase',
-      count: data[0]?.count || 0
+      count: data?.length || 0
     };
   } catch (error: any) {
     console.error('Supabase connection test failed:', error);

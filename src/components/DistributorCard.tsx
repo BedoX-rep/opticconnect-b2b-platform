@@ -1,89 +1,69 @@
 import React from 'react';
-import { MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
+import { MapPin, Building } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export interface DistributorProps {
   id: string;
   name: string;
-  image_url?: string; // Updated to match database column
   city?: string;
-  phone: string;
-  bio: string;
+  bio?: string;
+  image_url?: string | null;
   featured?: boolean;
+  [key: string]: any; // For other potential properties
 }
 
-const DistributorCard = ({ 
-  id, 
-  name, 
-  image_url, 
-  city, 
-  phone, 
-  bio, 
-  featured = false 
-}: DistributorProps) => {
-  const defaultImage = 'https://images.unsplash.com/photo-1577803645773-f96470509666?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
-
+const DistributorCard: React.FC<DistributorProps> = ({
+  id,
+  name,
+  city,
+  bio,
+  image_url,
+  featured
+}) => {
   return (
-    <div 
-      className={cn(
-        "group h-full overflow-hidden rounded-xl transition-all duration-300 bg-white border border-border hover:shadow-lg relative",
-        featured && "ring-2 ring-primary/20"
-      )}
-    >
-      {featured && (
-        <div className="absolute top-3 right-3 z-10">
-          <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-1 rounded-full">
-            Featured
-          </span>
-        </div>
-      )}
+    <Card className="overflow-hidden transition-all hover:shadow-md group h-full">
+      <Link to={`/distributor/${id}`} className="block h-full">
+        <CardContent className="p-0 h-full">
+          {/* Image/Logo Section */}
+          <div className="h-40 bg-primary/5 flex items-center justify-center">
+            {image_url ? (
+              <img 
+                src={image_url} 
+                alt={name} 
+                className="w-full h-full object-cover transition-all group-hover:scale-105"
+              />
+            ) : (
+              <Building className="h-16 w-16 text-primary/40" />
+            )}
+          </div>
 
-      <Link to={`/distributors/${id}`}>
-        <div className="relative h-64 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
-          <img 
-            src={image_url || defaultImage} 
-            alt={name} 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        </div>
+          {/* Content Section */}
+          <div className="p-5">
+            <div className="flex justify-between items-start">
+              <h3 className="font-semibold text-xl line-clamp-1">{name}</h3>
+              {featured && (
+                <Badge variant="outline" className="bg-primary/10 text-primary text-xs">
+                  Featured
+                </Badge>
+              )}
+            </div>
+
+            {city && (
+              <div className="flex items-center mt-2 text-muted-foreground text-sm">
+                <MapPin className="h-3 w-3 mr-1" />
+                <span>{city}</span>
+              </div>
+            )}
+
+            {bio && (
+              <p className="mt-3 text-muted-foreground text-sm line-clamp-2">{bio}</p>
+            )}
+          </div>
+        </CardContent>
       </Link>
-
-      <div className="p-6">
-        <Link to={`/distributors/${id}`}>
-          <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-            {name}
-          </h3>
-        </Link>
-
-        <div className="flex items-center text-sm text-muted-foreground mb-4">
-          <MapPin size={16} className="mr-1" />
-          <span>{city}</span>
-        </div>
-
-        <p className="text-sm text-muted-foreground mb-5 line-clamp-2">
-          {bio}
-        </p>
-
-        <div className="flex justify-between items-center pt-4 border-t border-border">
-          <a 
-            href={`tel:${phone}`}
-            className="flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-          >
-            <Phone size={16} className="mr-2" />
-            {phone}
-          </a>
-
-          <Link 
-            to={`/distributors/${id}`}
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            View Profile
-          </Link>
-        </div>
-      </div>
-    </div>
+    </Card>
   );
 };
 

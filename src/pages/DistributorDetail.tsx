@@ -3,12 +3,24 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
-import { MapPin, Phone, ArrowLeft, Building, ShoppingBag, Loader2, Share2 } from 'lucide-react';
+import { 
+  MapPin, 
+  Phone, 
+  ArrowLeft, 
+  Building, 
+  ShoppingBag, 
+  Loader2, 
+  Share2, 
+  Mail,
+  Calendar
+} from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent } from '@/components/ui/card';
 import { DistributorProps } from '@/components/DistributorCard';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 
 interface Product {
   id: string;
@@ -22,6 +34,7 @@ interface Product {
   distributors?: {
     name: string;
   };
+  description?: string;
 }
 
 const DistributorDetail = () => {
@@ -78,22 +91,12 @@ const DistributorDetail = () => {
     try {
       const { data, error } = await supabase
         .from('products')
-        .select(`
-          id,
-          name,
-          price,
-          min_quantity,
-          category,
-          image_url,
-          featured,
-          distributor_id,
-          distributors:distributor_id(name)
-        `)
+        .select('*')
         .eq('distributor_id', id)
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching distributor products:', error);
+        console.error('Error fetching products:', error);
         toast({
           title: 'Error fetching products',
           description: error.message,
@@ -103,11 +106,10 @@ const DistributorDetail = () => {
       }
 
       if (data) {
-        console.log('Fetched distributor products:', data);
         setProducts(data);
       }
     } catch (error: any) {
-      console.error('Error fetching distributor products:', error);
+      console.error('Error fetching products:', error);
       toast({
         title: 'Error fetching products',
         description: error.message || 'Unknown error occurred',
@@ -116,175 +118,174 @@ const DistributorDetail = () => {
     }
   };
 
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   const shareProfile = () => {
     if (navigator.share) {
       navigator.share({
-        title: `${distributor?.name} - OpticConnect`,
-        text: `Check out ${distributor?.name} on OpticConnect`,
+        title: `${distributor?.name} - Optical Distributor Profile`,
         url: window.location.href,
-      }).catch(error => {
-        console.error('Error sharing:', error);
+      }).catch(err => {
+        console.error('Error sharing:', err);
       });
     } else {
+      // Fallback for browsers that don't support navigator.share
+      navigator.clipboard.writeText(window.location.href);
       toast({
-        title: 'Share',
-        description: 'Sharing is not supported on this browser',
+        title: 'Link copied to clipboard',
+        description: 'You can now share this distributor profile.',
       });
     }
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex h-[70vh] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-xl">Loading distributor profile...</span>
       </div>
     );
   }
 
   if (!distributor) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold">Distributor not found</h1>
-          <p className="mt-4">The distributor you're looking for doesn't exist or has been removed.</p>
-          <Button asChild className="mt-6">
-            <Link to="/distributors">Back to Distributors</Link>
-          </Button>
-        </div>
+      <div className="container mx-auto px-4 py-10 text-center">
+        <h1 className="text-2xl font-bold mb-4">Distributor Not Found</h1>
+        <p className="mb-6">The distributor you're looking for doesn't exist or has been removed.</p>
+        <Button asChild>
+          <Link to="/distributors">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Distributors
+          </Link>
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 animate-fade-in">
-      {/* Back Button */}
-      <Button variant="ghost" asChild className="mb-6">
-        <Link to="/distributors">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Distributors
-        </Link>
-      </Button>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-6">
+        <Button variant="ghost" asChild className="mb-4">
+          <Link to="/distributors">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Distributors
+          </Link>
+        </Button>
+      </div>
 
-      {/* Distributor Profile */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Profile Header */}
-        <div className="md:col-span-2">
-          <div className="flex flex-col md:flex-row gap-6 items-start">
-            {/* Logo/Image */}
-            <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center overflow-hidden">
-              {distributor.image_url ? (
-                <img 
-                  src={distributor.image_url} 
-                  alt={distributor.name} 
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <Building className="h-12 w-12 text-primary" />
-              )}
-            </div>
-            
-            {/* Basic Info */}
-            <div className="flex-1">
-              <div className="flex justify-between">
-                <h1 className="text-3xl font-bold">{distributor.name}</h1>
-                <Button variant="outline" size="icon" onClick={shareProfile}>
-                  <Share2 className="h-4 w-4" />
-                </Button>
-              </div>
-              
-              {distributor.city && (
-                <div className="flex items-center mt-2 text-muted-foreground">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  <span>{distributor.city}</span>
-                </div>
-              )}
-              
-              {distributor.phone && (
-                <div className="flex items-center mt-2 text-muted-foreground">
-                  <Phone className="h-4 w-4 mr-2" />
-                  <span>{distributor.phone}</span>
-                </div>
-              )}
-              
-              {distributor.bio && (
-                <p className="mt-4 text-muted-foreground">{distributor.bio}</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Contact Card */}
+        {/* Distributor Info */}
         <div className="md:col-span-1">
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
+              <div className="flex flex-col items-center text-center mb-6">
+                <Avatar className="h-32 w-32 mb-4">
+                  <AvatarImage src={distributor.image_url || ''} alt={distributor.name} />
+                  <AvatarFallback className="text-3xl font-bold">
+                    {distributor.name.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <h1 className="text-2xl font-bold">{distributor.name}</h1>
+                {distributor.featured && (
+                  <Badge className="mt-2" variant="default">
+                    Featured Distributor
+                  </Badge>
+                )}
+              </div>
               
-              {distributor.email && (
-                <div className="mb-4">
-                  <p className="text-sm font-medium mb-1">Email</p>
-                  <p className="text-muted-foreground">{distributor.email}</p>
+              <Separator className="my-4" />
+              
+              {distributor.bio && (
+                <div className="mb-6 text-center">
+                  <p className="text-muted-foreground whitespace-pre-wrap">{distributor.bio}</p>
                 </div>
               )}
               
-              {distributor.phone && (
-                <div className="mb-4">
-                  <p className="text-sm font-medium mb-1">Phone</p>
-                  <p className="text-muted-foreground">{distributor.phone}</p>
-                </div>
-              )}
+              <Separator className="my-4" />
               
-              {distributor.city && (
-                <div>
-                  <p className="text-sm font-medium mb-1">Location</p>
-                  <p className="text-muted-foreground">{distributor.city}</p>
-                </div>
-              )}
+              <div className="space-y-4">
+                {distributor.city && (
+                  <div className="flex items-center">
+                    <MapPin className="h-5 w-5 mr-3 text-muted-foreground" />
+                    <span>{distributor.city}</span>
+                  </div>
+                )}
+                
+                {distributor.phone && (
+                  <div className="flex items-center">
+                    <Phone className="h-5 w-5 mr-3 text-muted-foreground" />
+                    <a href={`tel:${distributor.phone}`} className="hover:underline">
+                      {distributor.phone}
+                    </a>
+                  </div>
+                )}
+                
+                {distributor.email && (
+                  <div className="flex items-center">
+                    <Mail className="h-5 w-5 mr-3 text-muted-foreground" />
+                    <a href={`mailto:${distributor.email}`} className="hover:underline">
+                      {distributor.email}
+                    </a>
+                  </div>
+                )}
+                
+                {distributor.created_at && (
+                  <div className="flex items-center">
+                    <Calendar className="h-5 w-5 mr-3 text-muted-foreground" />
+                    <span>Joined {formatDate(distributor.created_at)}</span>
+                  </div>
+                )}
+              </div>
               
-              <Button className="w-full mt-6">
-                <ShoppingBag className="mr-2 h-4 w-4" />
-                View Products
-              </Button>
+              <div className="mt-6">
+                <Button onClick={shareProfile} variant="outline" className="w-full">
+                  <Share2 className="mr-2 h-4 w-4" />
+                  Share Profile
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
+
+        {/* Products Section */}
+        <div className="md:col-span-2">
+          <h2 className="text-2xl font-bold mb-6 flex items-center">
+            <ShoppingBag className="mr-2 h-5 w-5" />
+            Products by {distributor.name}
+            <span className="ml-2 text-sm text-muted-foreground">({products.length})</span>
+          </h2>
+
+          {products.length === 0 ? (
+            <div className="bg-muted p-6 rounded-lg text-center">
+              <p className="text-muted-foreground">This distributor hasn't added any products yet.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  minQuantity={product.min_quantity}
+                  category={product.category}
+                  imageUrl={product.image_url}
+                  featured={product.featured}
+                  distributorId={product.distributor_id}
+                  distributorName={distributor.name}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-
-      <Separator className="my-8" />
-
-      {/* Products Section */}
-      <section>
-        <h2 className="text-2xl font-bold mb-6 flex items-center">
-          <ShoppingBag className="mr-2 h-5 w-5" />
-          Products
-        </h2>
-        
-        {products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <ProductCard 
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                price={product.price}
-                min_quantity={product.min_quantity}
-                category={product.category}
-                image_url={product.image_url}
-                featured={product.featured}
-                distributor_id={product.distributor_id}
-                distributor_name={distributor.name}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 border border-dashed rounded-lg">
-            <ShoppingBag className="mx-auto h-10 w-10 text-muted-foreground" />
-            <h3 className="mt-4 text-lg font-medium">No products yet</h3>
-            <p className="mt-2 text-muted-foreground">
-              This distributor hasn't added any products yet.
-            </p>
-          </div>
-        )}
-      </section>
     </div>
   );
 };

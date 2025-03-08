@@ -75,13 +75,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 Min: {min_quantity} pcs
               </div>
             </div>
-        </div>
+          </div>
         </Link>
 
         {distributor_name && (
           <div className="px-5 pb-4">
-            <Link 
-              to={`/distributor/${distributor_id}`} 
+            <Link
+              to={`/distributors/${distributor_id}`}
               className="block text-sm text-muted-foreground hover:text-primary"
             >
               {distributor_name}

@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
-import { MapPin, Phone, ArrowLeft, Building, ShoppingBag, Loader2, Bookmark, Share2 } from 'lucide-react';
+import { MapPin, Phone, ArrowLeft, Building, ShoppingBag, Loader2, Share2 } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -17,7 +16,7 @@ interface Product {
   price: number;
   min_quantity: number;
   distributor_id: string;
-  distributor_name: string;
+  distributors: { name: string };
   category: string;
   featured: boolean;
 }
@@ -75,7 +74,7 @@ const DistributorDetail = () => {
           image_url,
           featured,
           distributor_id,
-          distributors(name)
+          distributors:distributor_id(name)
         `)
         .eq('distributor_id', id)
         .order('created_at', { ascending: false });
@@ -84,15 +83,8 @@ const DistributorDetail = () => {
 
       if (data) {
         const formattedProducts = data.map(item => ({
-          id: item.id,
-          name: item.name,
-          image_url: item.image_url,
-          price: item.price,
-          min_quantity: item.min_quantity,
-          distributor_id: item.distributor_id,
-          distributor_name: item.distributors.name,
-          category: item.category,
-          featured: item.featured
+          ...item,
+          distributor_name: item.distributors.name
         }));
         
         setProducts(formattedProducts);
@@ -119,7 +111,6 @@ const DistributorDetail = () => {
         console.error('Error sharing:', err);
       });
     } else {
-      // Fallback for browsers that don't support share API
       navigator.clipboard.writeText(window.location.href);
       toast({
         title: 'Link copied to clipboard',
@@ -170,10 +161,10 @@ const DistributorDetail = () => {
         
         {/* Distributor Header */}
         <div className="relative rounded-xl overflow-hidden h-64 md:h-80 mb-6">
-          {distributor.image ? (
+          {distributor.image_url ? (
             <>
               <img 
-                src={distributor.image} 
+                src={distributor.image_url} 
                 alt={distributor.name}
                 className="w-full h-full object-cover"
               />

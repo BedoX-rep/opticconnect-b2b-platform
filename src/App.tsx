@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import UserNavbar from "@/components/UserNavbar";
 import Index from "./pages/Index";
 import Distributors from "./pages/Distributors";
 import DistributorDetail from "./pages/DistributorDetail";
@@ -32,6 +33,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// App Layout component with navigation
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <>
+      <UserNavbar />
+      {children}
+    </>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -40,11 +51,46 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/distributors" element={<Distributors />} />
-            <Route path="/distributors/:id" element={<DistributorDetail />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route 
+              path="/" 
+              element={
+                <AppLayout>
+                  <Index />
+                </AppLayout>
+              } 
+            />
+            <Route 
+              path="/distributors" 
+              element={
+                <AppLayout>
+                  <Distributors />
+                </AppLayout>
+              } 
+            />
+            <Route 
+              path="/distributors/:id" 
+              element={
+                <AppLayout>
+                  <DistributorDetail />
+                </AppLayout>
+              } 
+            />
+            <Route 
+              path="/products" 
+              element={
+                <AppLayout>
+                  <Products />
+                </AppLayout>
+              } 
+            />
+            <Route 
+              path="/products/:id" 
+              element={
+                <AppLayout>
+                  <ProductDetail />
+                </AppLayout>
+              } 
+            />
             <Route path="/login" element={<Login />} />
             
             {/* Protected routes */}
@@ -52,7 +98,9 @@ const App = () => (
               path="/profile" 
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <AppLayout>
+                    <Profile />
+                  </AppLayout>
                 </ProtectedRoute>
               } 
             />
@@ -60,7 +108,9 @@ const App = () => (
               path="/manage-products" 
               element={
                 <ProtectedRoute>
-                  <ProductManagement />
+                  <AppLayout>
+                    <ProductManagement />
+                  </AppLayout>
                 </ProtectedRoute>
               } 
             />

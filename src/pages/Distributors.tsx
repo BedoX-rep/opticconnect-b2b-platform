@@ -30,13 +30,15 @@ const Distributors = () => {
       if (error) throw error;
 
       if (data) {
+        console.log('Fetched distributors:', data);
         setDistributors(data);
         
         // Extract unique cities for filter
-        const uniqueCities = [...new Set(data.map(distributor => distributor.city))];
+        const uniqueCities = [...new Set(data.map(distributor => distributor.city).filter(Boolean))];
         setCities(uniqueCities);
       }
     } catch (error: any) {
+      console.error('Error fetching distributors:', error);
       toast({
         title: 'Error fetching distributors',
         description: error.message,
@@ -49,7 +51,7 @@ const Distributors = () => {
 
   const filteredDistributors = distributors.filter(distributor => {
     const matchesSearchTerm = distributor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                             distributor.bio.toLowerCase().includes(searchTerm.toLowerCase());
+                             (distributor.bio && distributor.bio.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCity = selectedCity ? distributor.city === selectedCity : true;
     return matchesSearchTerm && matchesCity;
   });
@@ -123,7 +125,16 @@ const Distributors = () => {
         ) : filteredDistributors.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredDistributors.map((distributor) => (
-              <DistributorCard key={distributor.id} {...distributor} />
+              <DistributorCard 
+                key={distributor.id} 
+                id={distributor.id}
+                name={distributor.name}
+                image_url={distributor.image_url}
+                city={distributor.city}
+                phone={distributor.phone}
+                bio={distributor.bio}
+                featured={distributor.featured}
+              />
             ))}
           </div>
         ) : (

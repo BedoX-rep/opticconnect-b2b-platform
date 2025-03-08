@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 export interface DistributorProps {
   id: string;
   name: string;
-  image?: string;
+  image_url?: string;
   city: string;
   phone: string;
   bio: string;
@@ -17,7 +17,7 @@ export interface DistributorProps {
 const DistributorCard = ({ 
   id, 
   name, 
-  image, 
+  image_url, 
   city, 
   phone, 
   bio, 
@@ -44,7 +44,7 @@ const DistributorCard = ({
         <div className="relative h-64 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
           <img 
-            src={image || defaultImage} 
+            src={image_url || defaultImage} 
             alt={name} 
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

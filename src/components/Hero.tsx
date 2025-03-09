@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { ArrowDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -14,7 +13,7 @@ const Hero = () => {
         const scrollPosition = window.scrollY;
         const opacity = Math.max(1 - scrollPosition / 700, 0);
         const translateY = scrollPosition * 0.3;
-        
+
         textRef.current.style.opacity = opacity.toString();
         textRef.current.style.transform = `translateY(${translateY}px)`;
       }
@@ -32,11 +31,11 @@ const Hero = () => {
       {/* Background elements */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-background to-primary/10 z-0"></div>
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556015048-4d3aa10df74c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center opacity-10 z-0"></div>
-      
+
       {/* Geometric shapes for modern look */}
       <div className="absolute top-20 right-20 w-64 h-64 rounded-full bg-primary/5 blur-3xl"></div>
       <div className="absolute bottom-20 left-20 w-80 h-80 rounded-full bg-primary/10 blur-3xl"></div>
-      
+
       <div 
         ref={textRef}
         className="text-center px-4 z-10 transition-all duration-300 ease-out max-w-5xl"
@@ -51,7 +50,7 @@ const Hero = () => {
             Morocco's Premier Eyewear Platform
           </span>
         </motion.div>
-        
+
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -60,7 +59,7 @@ const Hero = () => {
         >
           Connect with Premium <br /> Eyewear Partners
         </motion.h1>
-        
+
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -70,7 +69,7 @@ const Hero = () => {
           OpticConnect brings together Morocco's finest eyewear distributors and retailers
           on a single, elegant platform. Discover, connect, and grow your optical business.
         </motion.p>
-        
+
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -91,7 +90,7 @@ const Hero = () => {
           </Link>
         </motion.div>
       </div>
-      
+
       {/* Scroll indicator */}
       <motion.div 
         initial={{ opacity: 0 }}

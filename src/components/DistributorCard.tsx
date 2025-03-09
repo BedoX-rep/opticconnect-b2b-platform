@@ -1,5 +1,5 @@
-
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useLanguage } from '@/hooks/useLanguage';
 import { MapPin, Phone, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
@@ -39,7 +39,7 @@ const DistributorCard = ({ id, name, image, city, phone, bio }: DistributorProps
             </div>
           )}
         </div>
-        
+
         <CardContent className="p-6">
           <div className="flex justify-between items-start mb-3">
             <h3 className="font-bold text-xl group-hover:text-primary transition-colors">{name}</h3>
@@ -47,9 +47,9 @@ const DistributorCard = ({ id, name, image, city, phone, bio }: DistributorProps
               <ArrowUpRight size={16} />
             </span>
           </div>
-          
+
           {bio && <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{bio}</p>}
-          
+
           {phone && (
             <div className="flex items-center text-muted-foreground text-sm">
               <Phone size={14} className="mr-2" />

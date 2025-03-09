@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DistributorCard, { DistributorProps } from './DistributorCard';
@@ -62,7 +61,7 @@ const FeaturedDistributors = () => {
             <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
-        
+
         <div 
           ref={ref}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -65,7 +64,7 @@ const FeaturedProducts = () => {
             <ArrowRight size={16} className="ml-1" />
           </Link>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredProducts.map(product => (
             <ProductCard key={product.id} {...product} />
@@ -77,10 +76,6 @@ const FeaturedProducts = () => {
 };
 
 export default FeaturedProducts;
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import ProductCard from './ProductCard';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
@@ -157,7 +152,7 @@ const FeaturedProducts = () => {
             <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
-        
+
         <div 
           ref={ref}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"

@@ -37,26 +37,28 @@ const featuredDistributors: DistributorProps[] = [
 
 const FeaturedDistributors = () => {
   return (
-    <section className="py-16 px-6">
+    <section className="py-24 px-6 bg-background">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-end mb-10">
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight">Featured Distributors</h2>
-            <p className="text-muted-foreground mt-2">Connect with Morocco's top eyewear specialists</p>
-          </div>
-          <Link 
-            to="/distributors" 
-            className="flex items-center text-primary font-medium hover:underline"
-          >
-            View all
-            <ArrowRight size={16} className="ml-1" />
-          </Link>
+        <div className="text-center mb-12">
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary mb-4 inline-block">Featured Partners</span>
+          <h2 className="text-3xl font-bold tracking-tight mb-4">Meet Our Premier Distributors</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">Connect with Morocco's top eyewear specialists who offer quality products at competitive prices</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredDistributors.map(distributor => (
             <DistributorCard key={distributor.id} {...distributor} />
           ))}
+        </div>
+        
+        <div className="text-center mt-12">
+          <Link 
+            to="/distributors" 
+            className="inline-flex items-center px-6 py-3 rounded-lg bg-primary/10 text-primary font-medium transition-all hover:bg-primary/20"
+          >
+            View All Distributors
+            <ArrowRight size={16} className="ml-2" />
+          </Link>
         </div>
       </div>
     </section>

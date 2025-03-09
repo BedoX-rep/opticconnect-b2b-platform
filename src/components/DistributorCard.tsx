@@ -5,6 +5,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MapPin, Phone, ArrowUpRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Store } from 'lucide-react'; // Added import for Store icon
+
 
 export interface DistributorProps {
   id: string;
@@ -28,42 +30,72 @@ const DistributorCard: React.FC<DistributorProps> = ({
   bio,
   featured
 }) => {
-  return (
-    <Card className="h-full flex flex-col transition-all hover:shadow-md">
-      <CardContent className="p-4 flex-grow">
-        <div className="flex items-center mb-4">
-          <Avatar className="h-12 w-12 mr-4">
-            <AvatarImage src={image_url || ''} alt={name} />
-            <AvatarFallback>{name.slice(0, 2).toUpperCase()}</AvatarFallback>
-          </Avatar>
-          <div>
-            <h3 className="font-medium text-lg">{name}</h3>
-            {city && (
-              <div className="flex items-center text-muted-foreground text-sm">
-                <MapPin className="h-3 w-3 mr-1" />
-                {city}
-              </div>
-            )}
-          </div>
-          {featured && (
-            <Badge variant="outline" className="ml-auto text-xs">
-              Featured
-            </Badge>
-          )}
-        </div>
+  const { t } = useLanguage; // Assuming useLanguage hook is available
 
+  return (
+    <Card className="overflow-hidden h-full flex flex-col hover:shadow-lg transition-all duration-300 border-border/50">
+      <div className="relative">
+        {featured && (
+          <div className="absolute top-4 right-4 z-10">
+            <Badge className="bg-primary text-white hover:bg-primary/90">
+              {t('featured', 'Featured')}
+            </Badge>
+          </div>
+        )}
+        <div className="bg-gradient-to-b from-primary/5 to-primary/10 pt-8 pb-4 px-6 flex flex-col items-center text-center">
+          <Avatar className="h-24 w-24 mb-4 ring-4 ring-background shadow-lg">
+            <AvatarImage src={image_url || ''} alt={name} />
+            <AvatarFallback className="text-2xl font-bold bg-primary text-primary-foreground">
+              {name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <h3 className="text-xl font-bold">{name}</h3>
+        </div>
+      </div>
+
+      <CardContent className="p-6 flex-grow">
         {bio && (
-          <p className="text-muted-foreground text-sm line-clamp-3 mb-4">{bio}</p>
+          <p className="text-muted-foreground text-center mb-6 line-clamp-3">
+            {bio}
+          </p>
         )}
 
-        <div className="mt-2">
-          <Button variant="outline" size="sm" asChild className="w-full">
-            <Link to={`/distributors/${id}`} className="flex items-center justify-center">
-              View Profile <ArrowUpRight className="ml-1 h-4 w-4" />
-            </Link>
-          </Button>
+        <div className="space-y-3 mt-2">
+          {city && (
+            <div className="flex items-center">
+              <div className="bg-primary/10 p-2 rounded-full mr-3">
+                <MapPin className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-sm">{city}</span>
+            </div>
+          )}
+
+          {phone && (
+            <div className="flex items-center">
+              <div className="bg-primary/10 p-2 rounded-full mr-3">
+                <Phone className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-sm">{phone}</span>
+            </div>
+          )}
+
+          <div className="flex items-center">
+            <div className="bg-primary/10 p-2 rounded-full mr-3">
+              <Store className="h-4 w-4 text-primary" />
+            </div>
+            <span className="text-sm">{t('viewProducts', 'View Products')}</span>
+          </div>
         </div>
       </CardContent>
+
+      <CardFooter className="p-4">
+        <Button asChild className="w-full" variant="default">
+          <Link to={`/distributor/${id}`}>
+            {t('viewDistributor', 'View Distributor')}
+            <ArrowUpRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

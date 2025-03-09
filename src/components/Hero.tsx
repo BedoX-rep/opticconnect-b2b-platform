@@ -1,74 +1,48 @@
-
-import React, { useEffect, useRef } from 'react';
-import { ArrowDown } from 'lucide-react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowDown } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const Hero = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!heroRef.current || !textRef.current) return;
-      
-      // Parallax effect
-      const scrollPosition = window.scrollY;
-      const opacity = 1 - scrollPosition / 700;
-      const transform = scrollPosition / 2;
-      
-      textRef.current.style.opacity = Math.max(0, opacity).toString();
-      textRef.current.style.transform = `translateY(${transform}px)`;
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const { t, currentLanguage } = useLanguage();
 
   return (
-    <div 
-      ref={heroRef}
-      className="relative h-screen flex items-center justify-center overflow-hidden"
-      style={{
-        backgroundImage: 'linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,1)), url(https://images.unsplash.com/photo-1556015048-4d3aa10df74c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}
-    >
-      <div 
-        ref={textRef}
-        className="text-center px-4 z-10 transition-all duration-300 ease-out max-w-4xl animate-slide-up"
-      >
-        <div className="inline-block mb-6">
-          <span className="px-3 py-1 rounded-full text-xs font-medium tracking-wider bg-primary/10 text-primary">
-            Moroccan Optical Eyewear
-          </span>
-        </div>
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
-          Connect with Premium Eyewear Distributors
+    <div className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-b from-primary to-primary-600 text-white overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-white opacity-5 rounded-full"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-white opacity-5 rounded-full"></div>
+        <div className="absolute top-40 right-20 w-32 h-32 bg-white opacity-5 rounded-full"></div>
+      </div>
+
+      <div className="container mx-auto px-4 z-10 text-center" dir={currentLanguage === 'ar' ? 'rtl' : 'ltr'}>
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight max-w-4xl mx-auto">
+          {t('hero.title', 'Morocco\'s Premier Eyewear Marketplace')}
         </h1>
-        <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-          OpticConnect brings together Morocco's finest eyewear distributors and retailers
-          on a single, elegant platform. Discover, connect, and grow your optical business.
+
+        <p className="text-xl md:text-2xl mb-10 opacity-90 max-w-2xl mx-auto">
+          {t('hero.subtitle', 'Connect with top eyewear distributors and retailers in one seamless platform')}
         </p>
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             to="/distributors"
-            className="px-8 py-3 rounded-lg bg-primary text-white font-medium transition-all hover:shadow-lg hover:translate-y-[-2px]"
+            className="px-8 py-3 rounded-lg bg-white text-primary font-medium transition-all hover:shadow-lg hover:translate-y-[-2px] min-w-[180px]"
           >
-            Find Distributors
+            {t('hero.findDistributors', 'Find Distributors')}
           </Link>
           <Link
             to="/products"
-            className="px-8 py-3 rounded-lg bg-secondary text-secondary-foreground font-medium transition-all hover:shadow-lg hover:translate-y-[-2px]"
+            className="px-8 py-3 rounded-lg bg-white/20 text-white font-medium transition-all hover:shadow-lg hover:bg-white/30 hover:translate-y-[-2px] min-w-[180px]"
           >
-            Browse Products
+            {t('hero.browseProducts', 'Browse Products')}
           </Link>
         </div>
-      </div>
-      
-      {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <ArrowDown className="text-muted-foreground" />
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <ArrowDown className="text-white opacity-70" />
+        </div>
       </div>
     </div>
   );

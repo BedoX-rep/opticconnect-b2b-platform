@@ -14,10 +14,10 @@ export interface DistributorProps {
   featured: boolean;
 }
 
-const DistributorCard = ({ id, name, image, city, phone, bio }: DistributorProps) => {
+const DistributorCard = ({ id, name, image, city, bio }: DistributorProps) => {
   return (
     <Card className="overflow-hidden h-full transition-all duration-300 hover:shadow-md hover:translate-y-[-4px] group border-primary/10">
-      <Link to={`/distributor/${id}`} className="block h-full">
+      <Link to={`/distributors/${id}`} className="block h-full">
         <div className="aspect-[16/9] w-full overflow-hidden bg-muted">
           {image ? (
             <img 
@@ -49,13 +49,6 @@ const DistributorCard = ({ id, name, image, city, phone, bio }: DistributorProps
           </div>
 
           {bio && <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{bio}</p>}
-
-          {phone && (
-            <div className="flex items-center text-muted-foreground text-sm">
-              <Phone size={14} className="mr-2" />
-              {phone}
-            </div>
-          )}
         </CardContent>
       </Link>
     </Card>

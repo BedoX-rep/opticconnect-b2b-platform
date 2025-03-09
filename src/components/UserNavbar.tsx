@@ -1,7 +1,7 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useLanguage } from '@/hooks/useLanguage';
 import { cn } from '@/lib/utils';
 import { 
   User, 
@@ -18,13 +18,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LanguageSwitcher } from './LanguageSwitcher';
 
 const UserNavbar = () => {
   const { user, signOut } = useAuth();
   const location = useLocation();
-  const { language, setLanguage } = useLanguage();
-
+  
   const isActive = (path: string) => {
     return location.pathname === path;
   };
@@ -63,10 +61,9 @@ const UserNavbar = () => {
               Products
             </Link>
           </div>
-
-          {/* Right section with auth/profile and language switcher */}
-          <div className="flex items-center space-x-4">
-            <LanguageSwitcher /> {/* Added LanguageSwitcher */}
+          
+          {/* Right section with auth/profile */}
+          <div className="flex items-center">
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

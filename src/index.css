@@ -1,6 +1,4 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,64 +6,64 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 20 10% 15%;
+    --foreground: 220 20% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 20 10% 15%;
+    --card-foreground: 220 20% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 20 10% 15%;
+    --popover-foreground: 220 20% 10%;
 
-    --primary: 20 95% 55%;
+    --primary: 220 50% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 20 15% 95%;
-    --secondary-foreground: 20 10% 15%;
+    --secondary: 220 20% 96%;
+    --secondary-foreground: 220 20% 10%;
 
-    --muted: 20 15% 95%;
-    --muted-foreground: 20 10% 45%;
+    --muted: 220 20% 96%;
+    --muted-foreground: 220 10% 50%;
 
-    --accent: 20 65% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 220 20% 96%;
+    --accent-foreground: 220 20% 10%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 20% 90%;
-    --input: 20 20% 90%;
-    --ring: 20 95% 55%;
+    --border: 220 20% 90%;
+    --input: 220 20% 90%;
+    --ring: 220 50% 50%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
   }
 
   .dark {
-    --background: 20 15% 8%;
-    --foreground: 0 0% 98%;
+    --background: 220 20% 10%;
+    --foreground: 0 0% 100%;
 
-    --card: 20 15% 10%;
-    --card-foreground: 0 0% 98%;
+    --card: 220 20% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 20 15% 10%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 220 20% 10%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 20 95% 55%;
+    --primary: 220 50% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 20 15% 14%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 220 20% 14%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 20 15% 14%;
-    --muted-foreground: 20 10% 70%;
+    --muted: 220 20% 14%;
+    --muted-foreground: 220 10% 70%;
 
-    --accent: 20 65% 55%; 
+    --accent: 220 20% 14%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 20% 18%;
-    --input: 20 20% 18%;
-    --ring: 20 95% 55%;
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 220 50% 50%;
   }
 }
 
@@ -132,61 +130,11 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .glass-dark {
-  background: rgba(20, 20, 20, 0.7);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-/* Modern UI elements */
-.modern-card {
-  border-radius: var(--radius);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border: 1px solid hsl(var(--border));
-  overflow: hidden;
-}
-
-.card-hover-effect:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-.dark .card-hover-effect:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-}
-
-/* Orange gradient backgrounds */
-.orange-gradient {
-  background: linear-gradient(135deg, hsl(20, 95%, 55%) 0%, hsl(30, 95%, 60%) 100%);
-}
-
-.orange-gradient-subtle {
-  background: linear-gradient(135deg, hsl(20, 30%, 95%) 0%, hsl(30, 30%, 98%) 100%);
-}
-
-.dark .orange-gradient-subtle {
-  background: linear-gradient(135deg, hsl(20, 30%, 15%) 0%, hsl(30, 30%, 20%) 100%);
-}
-
-/* Custom focus styles */
-*:focus-visible {
-  outline: 2px solid hsl(var(--ring));
-  outline-offset: 2px;
-}
-
-/* Custom button styles */
-button, .btn {
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-/* RTL support for Arabic */
-[dir="rtl"] * {
-  text-align: right;
 }

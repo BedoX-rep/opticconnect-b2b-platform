@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -22,7 +21,7 @@ import {
 const UserNavbar = () => {
   const { user, signOut } = useAuth();
   const location = useLocation();
-  
+
   const isActive = (path: string) => {
     return location.pathname === path;
   };
@@ -61,7 +60,7 @@ const UserNavbar = () => {
               Products
             </Link>
           </div>
-          
+
           {/* Right section with auth/profile */}
           <div className="flex items-center">
             {user ? (

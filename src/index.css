@@ -14,26 +14,29 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 20% 10%;
 
-    --primary: 220 50% 50%;
+    /* Coral Red Color Scheme */
+    --primary: 16 100% 66%;  /* Coral Red */
     --primary-foreground: 0 0% 100%;
+    --primary-light: 16 100% 76%;
+    --primary-dark: 16 100% 56%;
 
-    --secondary: 220 20% 96%;
+    --secondary: 210 20% 96%;
     --secondary-foreground: 220 20% 10%;
 
-    --muted: 220 20% 96%;
+    --muted: 210 20% 96%;
     --muted-foreground: 220 10% 50%;
 
-    --accent: 220 20% 96%;
-    --accent-foreground: 220 20% 10%;
+    --accent: 16 100% 96%;
+    --accent-foreground: 16 100% 40%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 220 20% 90%;
     --input: 220 20% 90%;
-    --ring: 220 50% 50%;
+    --ring: 16 100% 66%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
@@ -46,8 +49,11 @@
     --popover: 220 20% 10%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 220 50% 50%;
+    /* Coral Red Color Scheme - Dark Mode */
+    --primary: 16 90% 66%;  /* Coral Red */
     --primary-foreground: 0 0% 100%;
+    --primary-light: 16 90% 76%;
+    --primary-dark: 16 90% 56%;
 
     --secondary: 220 20% 14%;
     --secondary-foreground: 0 0% 100%;
@@ -55,15 +61,15 @@
     --muted: 220 20% 14%;
     --muted-foreground: 220 10% 70%;
 
-    --accent: 220 20% 14%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 16 30% 20%;
+    --accent-foreground: 16 90% 80%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 220 20% 20%;
     --input: 220 20% 20%;
-    --ring: 220 50% 50%;
+    --ring: 16 90% 66%;
   }
 }
 
@@ -130,11 +136,81 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
 }
 
 .glass-dark {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(20, 20, 30, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Modern card styling */
+.modern-card {
+  transition: all 0.3s ease;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.dark .modern-card {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark .card-hover-effect:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Modern button styling */
+.modern-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.modern-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 70%);
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.3s;
+  pointer-events: none;
+}
+
+.modern-button:active::after {
+  transform: scale(2);
+  opacity: 1;
+  transition: 0s;
+}
+
+/* Fancy dividers */
+.divider-gradient {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(var(--primary)), transparent);
+  margin: 2rem 0;
+}
+
+/* Animated background */
+.animated-bg {
+  background: linear-gradient(120deg, hsla(var(--background)), hsla(var(--primary-light)/0.05));
+  background-size: 200% 200%;
+  animation: gradientAnimation 15s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }

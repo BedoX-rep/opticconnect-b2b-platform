@@ -35,10 +35,25 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 // App Layout component with navigation
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
+    <div className="min-h-screen flex flex-col bg-background animated-bg">
       <UserNavbar />
-      {children}
-    </>
+      <main className="flex-grow pt-16 pb-8">
+        {children}
+      </main>
+      <footer className="py-6 border-t border-border/50">
+        <div className="container flex flex-col sm:flex-row justify-between items-center">
+          <div className="text-sm text-muted-foreground mb-4 sm:mb-0">
+            © {new Date().getFullYear()} All rights reserved
+          </div>
+          <div className="flex space-x-4 text-sm text-muted-foreground">
+            <a href="#" className="hover:text-primary transition-colors">About</a>
+            <a href="#" className="hover:text-primary transition-colors">Contact</a>
+            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
+            <a href="#" className="hover:text-primary transition-colors">Terms</a>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 };
 

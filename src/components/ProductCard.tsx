@@ -14,6 +14,7 @@ interface ProductCardProps {
   featured?: boolean;
   distributor_id: string;
   distributor_name?: string;
+  promoted?: boolean; // Added promoted prop
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -26,6 +27,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   featured = false,
   distributor_id,
   distributor_name,
+  promoted = false, // Added default value
 }) => {
   const formattedPrice = new Intl.NumberFormat('fr-MA', {
     style: 'currency',
@@ -34,61 +36,63 @@ const ProductCard: React.FC<ProductCardProps> = ({
   }).format(price);
 
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-md group h-full">
-      <CardContent className="p-0 h-full">
-        <Link to={`/product/${id}`} className="block">
-          {/* Product Image */}
-          <div className="h-48 bg-gray-100 flex items-center justify-center">
-            {image_url ? (
-              <img
-                src={image_url}
-                alt={name}
-                className="w-full h-full object-cover transition-all group-hover:scale-105"
-              />
-            ) : (
-              <ShoppingBag className="h-16 w-16 text-gray-300" />
-            )}
-          </div>
+    <Card className="overflow-hidden h-full flex flex-col modern-card card-hover-effect border-border/40">
+      <Link to={`/product/${id}`} className="relative block group">
+        <div className="aspect-square w-full overflow-hidden bg-muted/50 rounded-t-lg">
+          {image_url ? (
+            <img
+              src={image_url}
+              alt={name}
+              className="h-full w-full object-cover object-center transform transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+            />
+          ) : (
+            <ShoppingBag className="h-16 w-16 text-gray-300" />
+          )}
+        </div>
 
-          {/* Content Section */}
-          <div className="p-5">
-            <div className="flex justify-between items-start">
-              <h3 className="font-semibold text-lg line-clamp-1">{name}</h3>
-              {featured && (
-                <Badge variant="outline" className="bg-primary/10 text-primary text-xs">
-                  Featured
-                </Badge>
-              )}
-            </div>
-
-            {category && (
-              <Badge variant="secondary" className="mt-2 text-xs font-normal">
-                {category}
+        <div className="p-5">
+          <div className="flex justify-between items-start">
+            <h3 className="font-semibold text-lg line-clamp-1">{name}</h3>
+            {promoted && (
+              <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground font-medium shadow-lg">
+                Promoted
               </Badge>
             )}
+            {featured && (
+              <Badge variant="outline" className="bg-primary/10 text-primary text-xs">
+                Featured
+              </Badge>
+            )}
+          </div>
 
-            <div className="mt-4 flex items-center justify-between">
-              <div className="text-lg font-bold text-primary">
-                {formattedPrice}
-              </div>
-              <div className="text-xs text-muted-foreground">
-                Min: {min_quantity} pcs
-              </div>
+          {category && (
+            <Badge variant="secondary" className="mt-2 text-xs font-normal">
+              {category}
+            </Badge>
+          )}
+
+          <div className="mt-4 flex items-center justify-between">
+            <div className="text-lg font-bold text-primary">
+              {formattedPrice}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Min: {min_quantity} pcs
             </div>
           </div>
-        </Link>
+        </div>
+      </Link>
 
-        {distributor_name && (
-          <div className="px-5 pb-4">
-            <Link
-              to={`/distributors/${distributor_id}`}
-              className="block text-sm text-muted-foreground hover:text-primary"
-            >
-              {distributor_name}
-            </Link>
-          </div>
-        )}
-      </CardContent>
+      {distributor_name && (
+        <div className="px-5 pb-4">
+          <Link
+            to={`/distributors/${distributor_id}`}
+            className="block text-sm text-muted-foreground hover:text-primary"
+          >
+            {distributor_name}
+          </Link>
+        </div>
+      )}
     </Card>
   );
 };

@@ -144,7 +144,7 @@ const Distributors = () => {
                 key={distributor.id} 
                 id={distributor.id}
                 name={distributor.name}
-                image_url={distributor.image_url}
+                image={distributor.image_url}
                 city={distributor.city}
                 phone={distributor.phone}
                 bio={distributor.bio}

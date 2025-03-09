@@ -1,69 +1,63 @@
+
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MapPin, Phone, ArrowUpRight } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
 
 export interface DistributorProps {
   id: string;
   name: string;
-  image_url?: string | null;
-  city?: string;
-  phone?: string;
-  bio?: string;
-  featured?: boolean;
-  email?: string | null;
-  created_at?: string | null;
-  updated_at?: string | null;
+  image: string;
+  city: string;
+  phone: string;
+  bio: string;
+  featured: boolean;
 }
 
-const DistributorCard: React.FC<DistributorProps> = ({
-  id,
-  name,
-  image_url,
-  city,
-  phone,
-  bio,
-  featured
-}) => {
+const DistributorCard = ({ id, name, image, city, phone, bio }: DistributorProps) => {
   return (
-    <Card className="h-full flex flex-col transition-all hover:shadow-md">
-      <CardContent className="p-4 flex-grow">
-        <div className="flex items-center mb-4">
-          <Avatar className="h-12 w-12 mr-4">
-            <AvatarImage src={image_url || ''} alt={name} />
-            <AvatarFallback>{name.slice(0, 2).toUpperCase()}</AvatarFallback>
-          </Avatar>
-          <div>
-            <h3 className="font-medium text-lg">{name}</h3>
-            {city && (
-              <div className="flex items-center text-muted-foreground text-sm">
-                <MapPin className="h-3 w-3 mr-1" />
+    <Card className="overflow-hidden h-full transition-all duration-300 hover:shadow-md hover:translate-y-[-4px] group border-primary/10">
+      <Link to={`/distributor/${id}`} className="block h-full">
+        <div className="aspect-[16/9] w-full overflow-hidden bg-muted">
+          {image ? (
+            <img 
+              src={image} 
+              alt={name} 
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center bg-primary/5 text-primary">
+              {name.charAt(0)}
+            </div>
+          )}
+          {city && (
+            <div className="absolute top-4 right-4">
+              <div className="flex items-center bg-black/60 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs">
+                <MapPin size={12} className="mr-1" />
                 {city}
               </div>
-            )}
-          </div>
-          {featured && (
-            <Badge variant="outline" className="ml-auto text-xs">
-              Featured
-            </Badge>
+            </div>
           )}
         </div>
-
-        {bio && (
-          <p className="text-muted-foreground text-sm line-clamp-3 mb-4">{bio}</p>
-        )}
-
-        <div className="mt-2">
-          <Button variant="outline" size="sm" asChild className="w-full">
-            <Link to={`/distributors/${id}`} className="flex items-center justify-center">
-              View Profile <ArrowUpRight className="ml-1 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </CardContent>
+        
+        <CardContent className="p-6">
+          <div className="flex justify-between items-start mb-3">
+            <h3 className="font-bold text-xl group-hover:text-primary transition-colors">{name}</h3>
+            <span className="bg-primary/10 text-primary p-1 rounded-full group-hover:bg-primary group-hover:text-white transition-colors">
+              <ArrowUpRight size={16} />
+            </span>
+          </div>
+          
+          {bio && <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{bio}</p>}
+          
+          {phone && (
+            <div className="flex items-center text-muted-foreground text-sm">
+              <Phone size={14} className="mr-2" />
+              {phone}
+            </div>
+          )}
+        </CardContent>
+      </Link>
     </Card>
   );
 };

@@ -3,6 +3,8 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DistributorCard, { DistributorProps } from './DistributorCard';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 // Sample data - in a real app, this would come from a database
 const featuredDistributors: DistributorProps[] = [
@@ -36,26 +38,44 @@ const featuredDistributors: DistributorProps[] = [
 ];
 
 const FeaturedDistributors = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
   return (
-    <section className="py-16 px-6">
+    <section className="py-20 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-end mb-10">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Featured Distributors</h2>
-            <p className="text-muted-foreground mt-2">Connect with Morocco's top eyewear specialists</p>
+            <span className="px-3 py-1 rounded-full text-xs font-medium tracking-wider bg-primary/10 text-primary mb-4 inline-block">
+              Featured Partners
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">Featured Distributors</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl">Connect with Morocco's top eyewear specialists and discover premium products for your business</p>
           </div>
           <Link 
             to="/distributors" 
-            className="flex items-center text-primary font-medium hover:underline"
+            className="flex items-center text-primary font-medium hover:underline mt-4 md:mt-0 group"
           >
-            View all
-            <ArrowRight size={16} className="ml-1" />
+            View all distributors
+            <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredDistributors.map(distributor => (
-            <DistributorCard key={distributor.id} {...distributor} />
+        <div 
+          ref={ref}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {featuredDistributors.map((distributor, index) => (
+            <motion.div
+              key={distributor.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <DistributorCard {...distributor} />
+            </motion.div>
           ))}
         </div>
       </div>

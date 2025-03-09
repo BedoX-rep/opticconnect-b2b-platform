@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { LanguageProvider, useLanguage } from "@/hooks/useLanguage";
 import UserNavbar from "@/components/UserNavbar";
 import Index from "./pages/Index";
 import Distributors from "./pages/Distributors";
@@ -34,11 +35,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 // App Layout component with navigation
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
+  const { language } = useLanguage();
+  
   return (
-    <>
+    <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <UserNavbar />
       {children}
-    </>
+    </div>
   );
 };
 
@@ -46,10 +49,11 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
+        <LanguageProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
             <Route 
               path="/" 
               element={
@@ -118,6 +122,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </LanguageProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>

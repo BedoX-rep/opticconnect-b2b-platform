@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface ProductCardProps {
   id: string;
@@ -27,10 +28,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
   distributor_id,
   distributor_name,
 }) => {
-  const formattedPrice = new Intl.NumberFormat('fr-MA', {
+  const { language, t } = useLanguage();
+
+  const formattedPrice = new Intl.NumberFormat(language === 'ar' ? 'ar-EG' : 'en-US', {
     style: 'currency',
-    currency: 'MAD',
-    minimumFractionDigits: 2,
+    currency: 'USD',
+    minimumFractionDigits: 2
   }).format(price);
 
   return (
@@ -55,8 +58,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <div className="flex justify-between items-start">
               <h3 className="font-semibold text-lg line-clamp-1">{name}</h3>
               {featured && (
-                <Badge variant="outline" className="bg-primary/10 text-primary text-xs">
-                  Featured
+                <Badge variant="default" className="absolute top-2 right-2 z-10 orange-gradient">
+                  {t('product.featured') || 'Featured'}
                 </Badge>
               )}
             </div>
@@ -67,12 +70,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </Badge>
             )}
 
-            <div className="mt-4 flex items-center justify-between">
-              <div className="text-lg font-bold text-primary">
-                {formattedPrice}
-              </div>
-              <div className="text-xs text-muted-foreground">
-                Min: {min_quantity} pcs
+            <div className="mt-3 flex items-center justify-between">
+              <div className="font-medium">{formattedPrice}</div>
+              <div className="text-sm text-muted-foreground">
+                {t('product.minQuantity')}: {min_quantity} {t('product.pieces') || 'pcs'}
               </div>
             </div>
           </div>
